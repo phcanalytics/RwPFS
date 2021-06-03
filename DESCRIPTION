@@ -1,19 +1,28 @@
 Package: realworldPFS
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Calculate and compare a range of real-world PFS definitions
+Version: 0.0.1
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Michael",
+           family = "Bretscher",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+           email = "michael.bretscher@roche.com")
+Description: Calculate and compare a range of real-world PFS endpoint definitions from Flatiron and other real-world data sources.
+License: Copyright Roche
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Imports:
+    rlang,
+    dplyr,
+    lubridate,
+    tidyr,
+    stringr,
+    readr,
+    survival,
+    survminer,
+    broom,
+    purrr
 Suggests: 
     knitr,
     rmarkdown
