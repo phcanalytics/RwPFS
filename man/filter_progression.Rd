@@ -38,7 +38,9 @@ Allows for fine-grained selection of events and use with all datamarts. Will be 
 and \code{exclude_pseudoprogression} using logical AND.}
 }
 \value{
-Returns a data frame with the following three columns:
+Returns a data frame with the following three columns.
+
+\strong{New Columns:}
 
 \describe{
 

@@ -18,7 +18,7 @@
 #'
 #' @examples
 #'
-#' #'\dontrun{
+#' \dontrun{
 #' 
 #' #Note: the FlatironKitchen package is used in these
 #' #examples for simplicity. This is not a requirement.
@@ -275,15 +275,15 @@ compare_rwPFS <- function(
 
   #Pivot to long format
   spec <- .df %>%
-    select(patientid, contains(.labels)) %>%
+    dplyr::select(patientid, contains(.labels)) %>%
     tidyr::build_longer_spec(
       cols = contains("rwPFS") ,
       names_to = c("rwPFS_definition"),
       names_pattern = "rwPFS(.*)_.*[eof_date|event_type|date|days|months|event]$"
     ) %>%
-    mutate(
+    dplyr::mutate(
       rwPFS_definition = stringr::str_replace_all(rwPFS_definition, "_event$|_eof$", ""),
-      .value = case_when(
+      .value = dplyr::case_when(
         stringr::str_detect(.name, "eof_date") ~ "rwPFS_eof_date",
         stringr::str_detect(.name, "event_type") ~ "rwPFS_event_type",
         stringr::str_detect(.name, "date") ~ "rwPFS_date",
@@ -299,7 +299,7 @@ compare_rwPFS <- function(
     )
 
   d.prog_defs_long <- .df %>%
-    select(patientid, contains(.labels)) %>%
+    dplyr::select(patientid, contains(.labels)) %>%
     tidyr::pivot_longer_spec(spec)
 
 
@@ -307,16 +307,16 @@ compare_rwPFS <- function(
   #Compute KM median & HR relative to consensus variant
 
   reference_df <- d.prog_defs_long %>%
-    filter(rwPFS_definition == .reference)
+    dplyr::filter(rwPFS_definition == .reference)
 
 
   f <- function(df, reference_df){
 
-    d.combined <- bind_rows(df, reference_df) %>%
+    d.combined <- dplyr::bind_rows(df, reference_df) %>%
       dplyr::mutate(
         rwPFS_definition = as.character(rwPFS_definition) %>%
           factor() %>%
-          relevel(ref = .reference)
+          stats::relevel(ref = .reference)
       )
 
     #KM median
@@ -356,7 +356,7 @@ compare_rwPFS <- function(
   }
 
 
-  d.prog_defs_long %<>%
+  d.prog_defs_long <- d.prog_defs_long %>%
     dplyr::mutate(grouping_var = rwPFS_definition) %>%
     dplyr::group_by(grouping_var) %>%
     tidyr::nest() %>%
@@ -367,26 +367,26 @@ compare_rwPFS <- function(
 
 
   tableData <- d.prog_defs_long %>%
-    group_by(rwPFS_definition) %>%
-    summarise(
+    dplyr::group_by(rwPFS_definition) %>%
+    dplyr::summarise(
       Censoring = sum(rwPFS_event_type == "Censored"),
       Progression = sum(rwPFS_event_type == "Progression"),
       Death = sum(rwPFS_event_type == "Death"),
       Percent_death = 100*mean(rwPFS_event_type[rwPFS_event_type != "Censored"] == "Death") %>% round(digits = 3),
-      KM_median = first(KM_median),
-      Hazard_ratio = first(hazard_ratio)
+      KM_median = dplyr::first(KM_median),
+      Hazard_ratio = dplyr::first(hazard_ratio)
     ) %>%
-    arrange(rwPFS_definition)
+    dplyr::arrange(rwPFS_definition)
 
 
 
   if(.incremental_deaths_column){
     tableData <- tableData %>%
-      arrange(rwPFS_definition) %>%
+      dplyr::arrange(rwPFS_definition) %>%
       mutate(
         Incremental_deaths = Death - dplyr::lag(Death)
       ) %>%
-      select(
+      dplyr::select(
         rwPFS_definition,
         Censoring,
         Progression,

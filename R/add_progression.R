@@ -23,7 +23,9 @@
 #' @description Filters and aggregates Flatiron's progression table and returns a dataframe with three columns: the patient id, the date of first progression occurring at least `discard_n_days` after start_date, and the
 #' date up to which progression information was abstracted. A subset of progression events to be considered can be specified.
 #'
-#' @return Returns a data frame with the following three columns:
+#' @return Returns a data frame with the following three columns.
+#' 
+#' \strong{New Columns:}
 #' 
 #' \describe{
 #' 

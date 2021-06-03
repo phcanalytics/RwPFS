@@ -32,7 +32,7 @@ Hazard ratio relative to the reference, and incremental no. of death events from
 }
 \examples{
 
-#'\dontrun{
+\dontrun{
 
 #Note: the FlatironKitchen package is used in these
 #examples for simplicity. This is not a requirement.

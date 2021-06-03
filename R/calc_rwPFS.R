@@ -202,7 +202,7 @@ calc_rwPFS <- function(df,
   # rwPFS
   #------------------------
   df %>%
-    mutate(
+    dplyr::mutate(
 
       !!rwPFS_eof_date := pmin(
         !!.last_progression_abstraction_date,
@@ -211,7 +211,7 @@ calc_rwPFS <- function(df,
         na.rm = TRUE
       ),
 
-      !!rwPFS_event_type := case_when(
+      !!rwPFS_event_type := dplyr::case_when(
         #The order of these cases matters
 
         #Missing
@@ -249,7 +249,7 @@ calc_rwPFS <- function(df,
         TRUE  ~ NA_character_
       ),
 
-      !!rwPFS_date := case_when(
+      !!rwPFS_date := dplyr::case_when(
         !!rwPFS_event_type == "Missing" ~ NA_character_ %>% lubridate::as_date(),
         !!rwPFS_event_type == "Progression" ~ !!.progression_date,
         !!rwPFS_event_type == "Death" ~ !!.death_date,
@@ -260,7 +260,7 @@ calc_rwPFS <- function(df,
       !!rwPFS_days := (!!rwPFS_date - !!.start_date) %>% as.numeric,
 
 
-      !!rwPFS_event := case_when(
+      !!rwPFS_event := dplyr::case_when(
         !!rwPFS_event_type == "Missing" ~ NA_real_,
         !!rwPFS_event_type == "Progression" ~ 1.0,
         !!rwPFS_event_type == "Death" ~ 1.0,
@@ -269,10 +269,10 @@ calc_rwPFS <- function(df,
       ),
 
       #Restrict maximum follow_up to .max_follow_up_days = NA
-      !!rwPFS_event := if_else(!!rwPFS_days <= .max_follow_up_days,
+      !!rwPFS_event := dplyr::if_else(!!rwPFS_days <= .max_follow_up_days,
                                !!rwPFS_event,
                                0),
-      !!rwPFS_days := if_else(
+      !!rwPFS_days := dplyr::if_else(
         !!rwPFS_days <= .max_follow_up_days,
         !!rwPFS_days,
         .max_follow_up_days

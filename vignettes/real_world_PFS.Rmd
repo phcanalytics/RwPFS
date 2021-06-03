@@ -3,13 +3,13 @@ title: "Real-world Progression-free Survival (rwPFS)"
 author: "Michael Bretscher"
 date: "`r Sys.Date()`"
 bibliography: references.bib 
-#output: rmarkdown::html_vignette
+output: rmarkdown::html_vignette
 #output: word_document
-output: rmarkdown::md_document
-# vignette: >
-#   %\VignetteIndexEntry{Real-world Progression-free Survival (rwPFS)}
-#   %\VignetteEngine{knitr::rmarkdown}
-#   %\VignetteEncoding{UTF-8}
+#output: rmarkdown::md_document
+vignette: >
+  %\VignetteIndexEntry{Real-world Progression-free Survival (rwPFS)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
