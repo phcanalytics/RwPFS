@@ -3,12 +3,13 @@ title: "Real-world Progression-free Survival (rwPFS)"
 author: "Michael Bretscher"
 date: "`r Sys.Date()`"
 bibliography: references.bib 
-output: rmarkdown::html_vignette
+#output: rmarkdown::html_vignette
 #output: word_document
-vignette: >
-  %\VignetteIndexEntry{Real-world Progression-free Survival (rwPFS)}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+output: rmarkdown::md_document
+# vignette: >
+#   %\VignetteIndexEntry{Real-world Progression-free Survival (rwPFS)}
+#   %\VignetteEngine{knitr::rmarkdown}
+#   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -35,6 +36,26 @@ knitr::opts_chunk$set(
 )
 
 ```
+
+# realworldPFS package
+Calculate &amp; compare a range of real-world PFS endpoint definitions from Flatiron and other real-world data sources
+
+Installation:
+```{r, eval=FALSE}
+devtools::install_git("https://github.roche.com/RWDScodeshare/realworldPFS")
+```
+
+
+<br/>
+<br/>
+
+**Note that the vignette below is currently written for FlatironKitchen and needs to be updated. FlatironKitchen imports the 
+present *realworldPFS* package and provides wrappers around `add_progression`, `calc_rwPFS` and `compare_rwPFS` functions, called 
+`fi_add_progression`, `fi_calc_rwPFS`, and `fi_compare_rwPFS`, respectively. For details on how the use of *realworldPFS* functions differs from the *FlatironKitchen* wrappers please consult `?<function_name>`.
+
+
+<br/>
+<br/>
 
 
 **Feel free to skip the background section if just looking for how to use the software - if conducting an actual analysis, we recommend to read it in order to understand the pitfalls of using rwPFS**
