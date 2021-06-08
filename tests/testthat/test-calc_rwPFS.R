@@ -11,7 +11,7 @@ test_that("calc_rwPFS validations", {
     #NA - whichh *should* be returned by filter progression in absence of progression events
     as.Date(NA_character_), 
     #six dates one month apart
-    lubridate::as_date("2018-01-01") + lubridate::months(1:6)
+    lubridate::as_date("2018-01-01") + lubridate::days(1:6)
     )
   
   #All possible date permutations (order of dates, incl. NA & -Inf)
@@ -25,9 +25,18 @@ test_that("calc_rwPFS validations", {
   )
   
   
-  # mock_result <- calc_rwPFS(
-  #   
-  # )
+  mock_result <- calc_rwPFS(
+    mock_dataset,
+    .start_date = "start_date",
+    .visit_gap_start_date = "visit_gap_start_date",
+    .last_progression_abstraction_date = "last_progression_abstraction_date",
+    .progression_date = "progression_date",
+    .last_activity_date = "last_activity_date",
+    .death_date = "death_date",
+    .death_window_days = 30,
+    .label = "_test"
+    
+  )
   
   #see vignette for context https://github.roche.com/bretscm2/rwPFS4Rshowcase
   

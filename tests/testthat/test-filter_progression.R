@@ -14,7 +14,7 @@ test_that("filter_progression validations", {
     lastclinicnotedate = max(mock_dates),
     isradiographicevidence =  c("No"),
     ispseudoprogressionmentioned = c("Yes"),
-    isdivineintervention = NA
+    isdivineintervention = NA #unknown columns/flags might be present in future datamarts
   ) 
   
   
@@ -84,7 +84,7 @@ test_that("filter_progression validations", {
   )
   testthat::expect_equal(
     unique(tmp$progressiondate),
-    Inf %>% as.Date #this is because of min(progressiondate, na.rm = TRUE)) - #TODO check this has no impact in calc_rwPFS
+    NA_character_ %>% as.Date #progression date should be NA when there's no recorded progression fitting criteria
   )  
   
 
@@ -107,7 +107,7 @@ test_that("filter_progression validations", {
   )
   testthat::expect_equal(
     unique(tmp$progressiondate),
-    Inf %>% as.Date #this is because of min(progressiondate, na.rm = TRUE)) - #TODO check this has no impact in calc_rwPFS
+    NA_character_ %>% as.Date #this is because of min(progressiondate, na.rm = TRUE)) - #TODO check this has no impact in calc_rwPFS
   )    
   
  
@@ -130,7 +130,7 @@ test_that("filter_progression validations", {
   )
   testthat::expect_equal(
     unique(tmp$progressiondate),
-    Inf %>% as.Date #this is because of min(progressiondate, na.rm = TRUE)) - #TODO check this has no impact in calc_rwPFS
+    NA_character_ %>% as.Date #this is because of min(progressiondate, na.rm = TRUE)) - #TODO check this has no impact in calc_rwPFS
   )    
   
   

@@ -227,8 +227,14 @@ filter_progression <- function(.progression_table,
       progressiondate = suppressWarnings(min(progressiondate, na.rm = TRUE)), #some patients may have NA only
       lastclinicnotedate = min(lastclinicnotedate, na.rm = TRUE)
     ) %>%
-
-
+    
+    #min() above returned -Inf when no non-NA progressiondate values were present. Set -Inf to NA.
+    dplyr::mutate(progressiondate  = dplyr::if_else(
+      !is.finite(progressiondate),
+      as.Date(NA_character_),
+      progressiondate
+      )) %>%
+    
     # Add all patients back in (including those with missing progression information)
     dplyr::right_join(.progression_table %>%
                         dplyr::distinct(patientid), by = "patientid")
