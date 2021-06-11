@@ -48,8 +48,8 @@
 #' }
 #'
 #'If rwPFS could not be calculated, the \code{rwpfs<label>_event_type} will be set to "Missing", and all other columns will contain missing values.
-#'This can be due to one of the following reasons: missing \code{last_clinic_note_date}, missing \code{last_activity_date}, \code{last_clinic_note_date} equal to \code{start_date},
-#'or \code{death_date} being earlier than \code{start_date} (this can happen because death dates are rounded to mid-month in Flatiron).
+#'This can be due to one of the following reasons: missing \code{last_clinic_note_date} or <= \code{start_date}, missing \code{last_activity_date} or <= \code{start_date}, \code{last_clinic_note_date} <= \code{start_date},
+#'or \code{death_date} <= \code{start_date} (this can happen because death dates are rounded to mid-month in Flatiron).
 #'
 #'
 #' @export
@@ -215,10 +215,13 @@ calc_rwPFS <- function(df,
         #The order of these cases matters
 
         #Missing
-        is.na(!!.last_progression_abstraction_date) |
+        is.na(!!.start_date) |
+          is.na(!!.last_progression_abstraction_date) |
+          !!.last_progression_abstraction_date <= !!.start_date |
           is.na(!!.last_activity_date) |
-          is.na(!!.start_date) |
-          !!.last_progression_abstraction_date == !!.start_date |
+          !!.last_activity_date <= !!.start_date |
+          !!.visit_gap_start_date <= !!.start_date |
+          !!.progression_date <= !!.start_date |
           !!.death_date <= !!.start_date ~ "Missing",
 
 

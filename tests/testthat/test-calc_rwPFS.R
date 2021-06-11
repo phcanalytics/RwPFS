@@ -30,7 +30,7 @@ test_that("calc_rwPFS validations", {
     .last_activity_date = "last_activity_date",
     .death_date = "death_date",
     .death_window_days = 30,
-    .label = "_test"
+    .label = "_testing"
     
   )
   
@@ -44,14 +44,14 @@ test_that("calc_rwPFS validations", {
                is.na(last_activity_date)
              ) %>%
       {
-        all(is.na(.$rwPFS_test_eof_date)) &
-          all(.$rwPFS_test_event_type == "Missing") &
-          all(is.na(.$rwPFS_test_date)) & 
-        all(is.na(.$rwPFS_test_days)) & 
-        all(is.na(.$rwPFS_test_event)) & 
-        all(is.na(.$rwPFS_test_months))
+        all(is.na(.$rwPFS_testing_eof_date)) &
+          all(.$rwPFS_testing_event_type == "Missing") &
+          all(is.na(.$rwPFS_testing_date)) & 
+        all(is.na(.$rwPFS_testing_days)) & 
+        all(is.na(.$rwPFS_testing_event)) & 
+        all(is.na(.$rwPFS_testing_months))
       },
-    label = "If all dates for determining follow-up are missing, eof_date and all rwPFS results should be missing"
+    label = "'If all dates for determining follow-up are missing, eof_date and all rwPFS results should be missing'"
   )
 
   #If start_date is missing, all rwPFS result columns except eof_date should be missing
@@ -59,15 +59,43 @@ test_that("calc_rwPFS validations", {
     mock_result %>%
       dplyr::filter(is.na(start_date)) %>%
       {
-          all(.$rwPFS_test_event_type == "Missing") &
-          all(is.na(.$rwPFS_test_date)) & 
-          all(is.na(.$rwPFS_test_days)) & 
-          all(is.na(.$rwPFS_test_event)) & 
-          all(is.na(.$rwPFS_test_months))
+          all(.$rwPFS_testing_event_type == "Missing") &
+          all(is.na(.$rwPFS_testing_date)) & 
+          all(is.na(.$rwPFS_testing_days)) & 
+          all(is.na(.$rwPFS_testing_event)) & 
+          all(is.na(.$rwPFS_testing_months))
       },
-    label = "If start_date is missing, all rwPFS result columns except eof_date should be missing"
+    label = "'If start_date is missing, all rwPFS result columns except eof_date should be missing'"
   )  
 
+  
+  #rwPFS_eof_date & rwPFS_date, must be either missing or larger than the start_date (if all dates non-missing)
+  testthat::expect_true(
+    mock_result %>%
+      dplyr::filter(!is.na(start_date) &
+                      !is.na(rwPFS_testing_date) &
+                      !is.na(rwPFS_testing_eof_date)
+                    ) %>%
+      {
+          all(.$rwPFS_testing_date >= .$start_date) & 
+          all(.$rwPFS_testing_eof_date >= .$start_date) 
+      },
+    label = "'rwPFS_eof_date & rwPFS_date, must be either missing or larger than the start_date (if all dates non-missing)'"
+  )  
+  
+  
+  #rwPFS_date must be <= rwPFS_eof_date plus death_window_days (if both dates non-missing)
+  testthat::expect_true(
+    mock_result %>%
+      dplyr::filter(!is.na(rwPFS_testing_date) &
+                      !is.na(rwPFS_testing_eof_date)
+      ) %>%
+      {
+        all(.$rwPFS_testing_date <= .$rwPFS_testing_eof_date + 30) 
+      },
+    label = "'rwPFS_date must be <= rwPFS_eof_date plus death_window_days (if both dates non-missing)'"
+  ) 
+  
   
   #if there's at least one non-missing of last_activity_date, last_progression_abstraction_date, visit_gap_start_date
   #then the earliest of those should be end of follow-up for progression
@@ -83,38 +111,37 @@ test_that("calc_rwPFS validations", {
                .$last_progression_abstraction_date, 
                .$visit_gap_start_date, 
                na.rm = TRUE
-               ) == .$rwPFS_test_eof_date
+               ) == .$rwPFS_testing_eof_date
         )
       },
-    label = "If there's at least one non-missing of last_activity_date, last_progression_abstraction_date, visit_gap_start_date then the earliest of those should be end of follow-up for progression"
+    label = "'If there's at least one non-missing of last_activity_date, last_progression_abstraction_date, visit_gap_start_date then the earliest of those should be end of follow-up for progression'"
   )  
   
   
   
   #if the minimum of last_activity_date, last_progression_abstraction_date, visit_gap_start_date
   #is before start date, then all result columns must be missing
-  #FIXME fix this tes
   testthat::expect_true(
     mock_result %>%
-      dplyr::filter(!(is.na(start_date) & #we need non-missing start_date
+      dplyr::filter(!(is.na(start_date)) & #we need non-missing start_date
                     !(is.na(visit_gap_start_date) & #..and at least one non-missing of these 
                         is.na(last_progression_abstraction_date) &
                         is.na(last_activity_date)) &
-                    rwPFS_test_eof_date < start_date
-                      )
-      ) %>%
+                    rwPFS_testing_eof_date < start_date
+                      ) 
+    %>%
       {
-        all(.$rwPFS_test_event_type == "Missing") &
-          all(is.na(.$rwPFS_test_date)) & 
-          all(is.na(.$rwPFS_test_days)) & 
-          all(is.na(.$rwPFS_test_event)) & 
-          all(is.na(.$rwPFS_test_months))
-      }
+        all(.$rwPFS_testing_event_type == "Missing") &
+          all(is.na(.$rwPFS_testing_date)) & 
+          all(is.na(.$rwPFS_testing_days)) & 
+          all(is.na(.$rwPFS_testing_event)) & 
+          all(is.na(.$rwPFS_testing_months))
+      },
+    label = "'If the minimum of last_activity_date, last_progression_abstraction_date, visit_gap_start_date is before start date, then all result columns must be missing'"
   )    
-  t
   
-  #TODO eof_date must be larger than start_date .. if the minimum of the above three is before start date, then rwPFS cannot be calculated
-  #and is set to missing (event type as well as output dates) 
+ 
+  
   
   #TODO If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is "Progression" and event == 1
   #days/months is progression_date minus start_date
@@ -125,6 +152,5 @@ test_that("calc_rwPFS validations", {
   #If there's no progression <= eof_date and non-missing death date within <30d after eof_date, then rwPFS_event_type is "censored"
   #rwPFS_event == 0 , and days/months is eof_date - minus start_date
   
-  #see vignette for context https://github.roche.com/bretscm2/rwPFS4Rshowcase
   
 })
