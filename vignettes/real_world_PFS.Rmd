@@ -25,7 +25,7 @@ library(knitr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = TRUE, #FALSE,  
+  eval = FALSE,  # set to TRUE for running vignette (but must remove dependence on Flatironkitchen)
   echo = TRUE,         # echo code?
   message = TRUE,     # Show messages
   warning = TRUE,     # Show warnings
