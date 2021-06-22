@@ -383,7 +383,7 @@ compare_rwPFS <- function(
   if(.incremental_deaths_column){
     tableData <- tableData %>%
       dplyr::arrange(rwPFS_definition) %>%
-      mutate(
+      dplyr::mutate(
         Incremental_deaths = Death - dplyr::lag(Death)
       ) %>%
       dplyr::select(
@@ -399,7 +399,7 @@ compare_rwPFS <- function(
 
   #polish table appearance
   tableData <- tableData %>%
-    mutate(
+    dplyr::mutate(
       rwPFS_definition = as.character(rwPFS_definition),
       rwPFS_definition = stringr::str_replace(rwPFS_definition, pattern = "^_", replacement = ""),
       rwPFS_definition = stringr::str_replace_all(rwPFS_definition, pattern = "_", replacement = " "),
