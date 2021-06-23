@@ -38,7 +38,7 @@ test_that("calc_rwPFS validations", {
   #days/months is progression_date minus start_date
   
  mock_result_subset <- mock_result %>%
-    dplyr::filter((progressiondate < rwPFS_testing_eof_date))
+    dplyr::filter((progressiondate <= rwPFS_testing_eof_date))
   
   expected <- c("patient10+", "patient11+")
   testthat::expect_equal(expected, mock_result_subset$patientid)
@@ -47,7 +47,7 @@ test_that("calc_rwPFS validations", {
     mock_result %>%
       dplyr::filter((progressiondate <= rwPFS_testing_eof_date)) %>%
       {
-        all(.$rwPFS_testing_date == .$progression_date) &
+        all(.$rwPFS_testing_date == .$progressiondate) &
           all(.$rwPFS_testing_event_type == "Progression") &
           all(.$rwPFS_testing_event == 1) &
           all(.$rwPFS_testing_days == .$progressiondate - .$lot1startdate)
@@ -74,7 +74,7 @@ test_that("calc_rwPFS validations", {
                       ((dateofdeath - rwPFS_testing_eof_date) < 30)
                     ) %>%
       {
-        all(.$rwPFS_testing_eof_date == .$progression_date) &
+        all(.$rwPFS_testing_date == .$dateofdeath) &
           all(.$rwPFS_testing_event_type == "Death") &
           all(.$rwPFS_testing_event == 1) &
           all(.$rwPFS_testing_days == .$dateofdeath - .$lot1startdate)
