@@ -47,7 +47,7 @@ test_that("calc_rwPFS validations", {
     mock_result %>%
       dplyr::filter((progressiondate <= rwPFS_testing_eof_date)) %>%
       {
-        all(.$rwPFS_testing_eof_date > .$progression_date) &
+        all(.$rwPFS_testing_date == .$progression_date) &
           all(.$rwPFS_testing_event_type == "Progression") &
           all(.$rwPFS_testing_event == 1) &
           all(.$rwPFS_testing_days == .$progressiondate - .$lot1startdate)
