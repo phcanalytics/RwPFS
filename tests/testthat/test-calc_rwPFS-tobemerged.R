@@ -34,7 +34,7 @@ test_that("calc_rwPFS validations", {
     
   )
   
-  #TODO If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is "Progression" and event == 1
+  #If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is "Progression" and event == 1
   #days/months is progression_date minus start_date
   
  mock_result_subset <- mock_result %>%
@@ -55,7 +55,7 @@ test_that("calc_rwPFS validations", {
     label = "'If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is 'Progression' and event == 1 days/months is progression_date minus start_date'"
   )
   
-  #TODO else if there's no progression <= eof_date, but there's a non-missing death date within <30d after eof_date, then rwPFS date
+  #else if there's no progression <= eof_date, but there's a non-missing death date within <30d after eof_date, then rwPFS date
   #must be equal to death date, event_type must be "Death", and event == 1, days/months is death_date minus start_date
   
   mock_result_subset<- mock_result %>%
@@ -79,16 +79,17 @@ test_that("calc_rwPFS validations", {
           all(.$rwPFS_testing_event == 1) &
           all(.$rwPFS_testing_days == .$death_date - .$start_date)
       },
-    label = "'TODO else if there's no progression <= eof_date, but there's a non-missing death date within <30d after eof_date, then rwPFS date
+    label = "'If there's no progression <= eof_date, but there's a non-missing death date within <30d after eof_date, then rwPFS date
   must be equal to death date, event_type must be 'Death', and event == 1, days/months is death_date minus start_date'"
   )
+  
   
   #If there's no progression <= eof_date and non-missing death date within <30d after eof_date, then rwPFS_event_type is "censored"
   #rwPFS_event == 0 , and days/months is eof_date - minus start_date
   
   mock_result_subset<- mock_result %>%
     dplyr::filter(progression_date > rwPFS_testing_eof_date &
-                  death_date - rwPFS_testing_eof_date > 30 &
+                  death_date - rwPFS_testing_eof_date >= 30 &
                   rwPFS_testing_event_type == "Censored"
     )
   
