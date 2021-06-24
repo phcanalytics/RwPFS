@@ -140,7 +140,7 @@ filter_progression <- function(.progression_table,
   }
 
 
-  if (is.null(.discard_n_days) | class(.discard_n_days) != "numeric" | .discard_n_days < 0) {
+  if (is.null(.discard_n_days) || class(.discard_n_days) != "numeric" || .discard_n_days < 0) {
     stop("Please specify the number of days after baseline where progression events are ignored (0 for none)")
   }
 

@@ -1,9 +1,65 @@
-context("calc_rwPFS")
+context("compare_rwPFS")
+require(dplyr)
 
-test_that("calc_rwPFS validations", {
-  
-  require(dplyr)
-  
+test_that("compare_rwPFS validations", {
+  testthat::expect_error(
+    compare_rwPFS(NULL,
+      .labels = NULL,
+      .reference = label_50,
+      .incremental_deaths_column = TRUE
+    ),
+    "Please provide a character vector with the labels of at least two rwPFS definitions to compare",
+    fixed = TRUE
+  )
+
+
+  testthat::expect_error(
+    compare_rwPFS(NULL,
+      .labels = c("_50", "_100"),
+      .reference = label_50,
+      .incremental_deaths_column = TRUE
+    ),
+    "The following required columns are missing in your data: rwPFS_50_months,rwPFS_100_months,rwPFS_50_event,rwPFS_100_event,rwPFS_50_event_type,rwPFS_100_event_type"
+  )
+
+
+  mock_calc_table <- tibble::tribble(
+    ~patientid, ~rwPFS_50_months, ~rwPFS_100_months, ~rwPFS_50_event, ~rwPFS_100_event, ~rwPFS_50_event_type, ~rwPFS_100_event_type
+  )
+
+  testthat::expect_error(
+    compare_rwPFS(mock_calc_table,
+      .labels = c("_50", "_100"),
+      .reference = NULL,
+      .incremental_deaths_column = TRUE
+    ),
+    "Please provide the name of the reference label (should be one of those supplied via the 'labels' variable)",
+    fixed = TRUE
+  )
+
+  testthat::expect_error(
+    compare_rwPFS(mock_calc_table,
+      .labels = c("_50", "_100"),
+      .reference = "_60",
+      .incremental_deaths_column = TRUE
+    ),
+    "The reference label should be one of those supplied via the 'labels' variable",
+    fixed = TRUE
+  )
+
+  testthat::expect_error(
+    compare_rwPFS(mock_calc_table,
+      .labels = c("_50", "_100"),
+      .reference = "_50",
+      .incremental_deaths_column = NULL
+    ),
+    "Please specify whether the summary table should include a column containing the incremental no. of death events from one rwPFS defnition to the next (TRUE/FALSE)",
+    fixed = TRUE
+  )
+})
+
+test_that("compare_rwPFS", {
+
   # 10 patients for Missing/Progression/Death/Censored
   mock_prog_table <- tibble::tribble(
     ~startdate, ~visit_gap_start_date, ~last_progression_abstraction_date, ~progression_date, ~last_activity_date, ~death_date,
