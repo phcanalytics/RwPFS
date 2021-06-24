@@ -23,6 +23,9 @@
 #' #Note: the FlatironKitchen package is used in these
 #' #examples for simplicity. This is not a requirement.
 #' 
+#' library(FlatironKitchen)
+#' library(dplyr)
+#' 
 #' #Initialize FlatironKitchen object
 #' fk <- fi_start(datamart = "AdvancedNSCLC",
 #'                title = "rwPFS in aNSCLC")  %>%
@@ -269,8 +272,16 @@ compare_rwPFS <- function(
     stop("Please specify whether the summary table should include a column containing the incremental no. of death events from one rwPFS defnition to the next (TRUE/FALSE)")
   }
 
-
-
+  #Patients with missing values cannot be used in the comparison
+  missing_rwPFS <- .df %>%
+    dplyr::filter_at(vars(ends_with("_event_type")), any_vars(. == "Missing")) %>%
+    nrow()
+  
+  if (missing_rwPFS > 0) {
+    warning(paste(missing_rwPFS, "Patients with missing rwPFS were found and removed"))
+    .df <- .df %>%
+      dplyr::filter_at(vars(ends_with("_event_type")), all_vars(. != "Missing"))
+  }
 
 
   #Pivot to long format

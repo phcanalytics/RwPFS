@@ -1,11 +1,10 @@
 Package: realworldPFS
 Title: Calculate and compare a range of real-world PFS definitions
 Version: 0.0.1
-Authors@R: 
-    person(given = "Michael",
-           family = "Bretscher",
-           role = c("aut", "cre"),
-           email = "michael.bretscher@roche.com")
+Authors@R: c( 
+    person(given = "Michael", family = "Bretscher", role = c("aut", "cre"), email = "michael.bretscher@roche.com"),
+    person("Shanmugasundaram", "Prabhu", email = "shanmup3@gene.com", role = "aut"),
+    person("Nandi", "Kalyan", email = "nandik@gene.com", role = "aut"))
 Description: Calculate and compare a range of real-world PFS endpoint definitions from Flatiron and other real-world data sources.
 License: Copyright Roche
 Encoding: UTF-8
