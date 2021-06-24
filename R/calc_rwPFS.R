@@ -203,13 +203,20 @@ calc_rwPFS <- function(df,
   #------------------------
   df %>%
     dplyr::mutate(
-
+      #Determine the end of progression follow-up
       !!rwPFS_eof_date := pmin(
-        !!.last_progression_abstraction_date,
-        !!.visit_gap_start_date,
-        !!.last_activity_date,
-        na.rm = TRUE
+          !!.last_progression_abstraction_date,
+          !!.visit_gap_start_date,
+          !!.last_activity_date,
+          na.rm = TRUE
+        ),
+      #..but if .last_progression_abstraction_date is missing, eof_date must be missing, too
+      !!rwPFS_eof_date := dplyr::if_else(
+        is.na(!!.last_progression_abstraction_date),
+        NA_character_ %>% lubridate::as_date(),
+        !!rwPFS_eof_date
       ),
+      
 
       !!rwPFS_event_type := dplyr::case_when(
         #The order of these cases matters

@@ -10,7 +10,7 @@ test_that("calc_rwPFS validations", {
     lubridate::as_date("2018-01-01") + lubridate::weeks(1:6)
     )
   
-  #All possible date permutations (order of dates, incl. NA & -Inf)
+  #All possible date permutations (order of dates, incl. NA)
   mock_dataset <- expand.grid(
     start_date = mock_dates,
     visit_gap_start_date = mock_dates,
@@ -98,12 +98,13 @@ test_that("calc_rwPFS validations", {
   
   
   #if there's at least one non-missing of last_activity_date, last_progression_abstraction_date, visit_gap_start_date
-  #then the earliest of those should be end of follow-up for progression
+  #then the earliest of those should be end of follow-up for progression (only if last_progression_abstraction_date is non-missing)
   testthat::expect_true(
     mock_result %>%
       dplyr::filter(!(is.na(visit_gap_start_date) &
                is.na(last_progression_abstraction_date) &
-               is.na(last_activity_date))
+               is.na(last_activity_date)) &
+                 !is.na(last_progression_abstraction_date)
       ) %>%
       {
         all(
@@ -114,7 +115,7 @@ test_that("calc_rwPFS validations", {
                ) == .$rwPFS_testing_eof_date
         )
       },
-    label = "'If there's at least one non-missing of last_activity_date, last_progression_abstraction_date, visit_gap_start_date then the earliest of those should be end of follow-up for progression'"
+    label = "'If there's at least one non-missing of last_activity_date, last_progression_abstraction_date, visit_gap_start_date then the earliest of those should be end of follow-up for progression (only if last_progression_abstraction_date is non-missing)'"
   )  
   
   
@@ -128,8 +129,7 @@ test_that("calc_rwPFS validations", {
                         is.na(last_progression_abstraction_date) &
                         is.na(last_activity_date)) &
                     rwPFS_testing_eof_date < start_date
-                      ) 
-    %>%
+                      )  %>%
       {
         all(.$rwPFS_testing_event_type == "Missing") &
           all(is.na(.$rwPFS_testing_date)) & 
@@ -145,6 +145,26 @@ test_that("calc_rwPFS validations", {
   
   #TODO If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is "Progression" and event == 1
   #days/months is progression_date minus start_date
+  
+  # testthat::expect_true(
+  #   mock_result %>%
+  #     dplyr::filter(!is.na(start_date) & #we need non-missing start_date
+  #                     !is.na(rwPFS_testing_eof_date) &
+  #                     !is.na(progression_date) &
+  #                     progression_date <= rwPFS_testing_eof_date & 
+  #                     rwPFS_testing_eof_date > start_date &
+  #                     progression_date > start_date)  %>%
+  #     {
+  #       all(.$rwPFS_testing_event_type == "Progression") &
+  #         all(.$rwPFS_testing_date == .$progression_date) & 
+  #         all(.$rwPFS_testing_event == 1) #& 
+  #         #all(as.numeric(.$progression_date - .$start_date, unit = "days") == .$rwPFS_testing_days) #& 
+  #         #all(is.na(.$rwPFS_testing_months))
+  #     },
+  #   label = "'If the minimum of last_activity_date, last_progression_abstraction_date, visit_gap_start_date is before start date, then all result columns must be missing'"
+  # )    
+  # 
+  
   
   #TODO else if there's no progression <= eof_date, but there's a non-missing death date within <30d after eof_date, then rwPFS date
   #must be equal to death date, event_type must be "Death", and event == 1, days/months is death_date minus start_date
