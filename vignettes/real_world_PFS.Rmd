@@ -25,7 +25,7 @@ library(knitr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE,  # set to TRUE for running vignette (but must remove dependence on Flatironkitchen)
+  eval = TRUE,  # set to TRUE for running vignette (but must remove dependence on Flatironkitchen)
   echo = TRUE,         # echo code?
   message = TRUE,     # Show messages
   warning = TRUE,     # Show warnings
@@ -51,7 +51,10 @@ devtools::install_git("https://github.roche.com/RWDScodeshare/realworldPFS")
 
 **Note that the vignette below is currently written for FlatironKitchen and needs to be updated. FlatironKitchen imports the 
 present *realworldPFS* package and provides wrappers around `add_progression`, `calc_rwPFS` and `compare_rwPFS` functions, called 
-`fi_add_progression`, `fi_calc_rwPFS`, and `fi_compare_rwPFS`, respectively. For details on how the use of *realworldPFS* functions differs from the *FlatironKitchen* wrappers please consult `?<function_name>`.
+`fi_add_progression`, `fi_calc_rwPFS`, and `fi_compare_rwPFS`, respectively. 
+
+
+For details on how the use of a *realworldPFS* function differs from the corresponding *FlatironKitchen* wrapper please consult `?function_name`.**
 
 
 <br/>

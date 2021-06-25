@@ -73,7 +73,7 @@ Hazard ratio relative to the reference, and incremental no. of death events from
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">realworldPFS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
       </span>
     </div>
 
@@ -102,7 +102,12 @@ Hazard ratio relative to the reference, and incremental no. of death events from
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.roche.com/RWDScodeshare/realworldPFS/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -168,12 +173,15 @@ parameter values in <code>fi_calc_rwPFS</code>.</p></td>
 <span class='co'>#Note: the FlatironKitchen package is used in these</span>
 <span class='co'>#examples for simplicity. This is not a requirement.</span>
 
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://go.roche.com/FlatironKitchen'>FlatironKitchen</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
+
 <span class='co'>#Initialize FlatironKitchen object</span>
-<span class='va'>fk</span> <span class='op'>&lt;-</span> <span class='fu'>fi_start</span><span class='op'>(</span>datamart <span class='op'>=</span> <span class='st'>"AdvancedNSCLC"</span>,
+<span class='va'>fk</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/FlatironKitchen/man/fi_start.html'>fi_start</a></span><span class='op'>(</span>datamart <span class='op'>=</span> <span class='st'>"AdvancedNSCLC"</span>,
                title <span class='op'>=</span> <span class='st'>"rwPFS in aNSCLC"</span><span class='op'>)</span>  <span class='op'>%&gt;%</span>
   
   <span class='co'>#Use start of line as start_date</span>
-  <span class='fu'>fi_add_lineoftherapy_flatiron</span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/FlatironKitchen/man/fi_add_lineoftherapy_flatiron.html'>fi_add_lineoftherapy_flatiron</a></span><span class='op'>(</span>
     lines <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span><span class='op'>)</span>,
     index_date <span class='op'>=</span> <span class='st'>"advanceddiagnosisdate"</span>,
     left <span class='op'>=</span> <span class='fl'>0</span>,
@@ -182,14 +190,14 @@ parameter values in <code>fi_calc_rwPFS</code>.</p></td>
   <span class='op'>)</span> <span class='op'>%&gt;%</span>
   
   <span class='co'>#Restrict to Carboplatin &amp; Paclitaxel in 1st line</span>
-  <span class='fu'>fi_cohort_include</span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/FlatironKitchen/man/fi_cohort_include.html'>fi_cohort_include</a></span><span class='op'>(</span>
     <span class='va'>lot1linename</span> <span class='op'>==</span> <span class='st'>"Carboplatin,Paclitaxel"</span>,
     description <span class='op'>=</span> <span class='st'>"Carboplatin &amp; Paclitaxel in 1st line"</span>,
     keep_na <span class='op'>=</span> <span class='cn'>FALSE</span>
   <span class='op'>)</span>  <span class='op'>%&gt;%</span>
   
   <span class='co'>#Add information on any long visit gaps</span>
-  <span class='fu'>fi_calc_visitgap</span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_visitgap.html'>fi_calc_visitgap</a></span><span class='op'>(</span>
     index_date <span class='op'>=</span> <span class='st'>"lot1startdate"</span>,
     gapdays <span class='op'>=</span> <span class='fl'>90</span>,
     what <span class='op'>=</span> <span class='st'>"After"</span>,
@@ -199,12 +207,12 @@ parameter values in <code>fi_calc_rwPFS</code>.</p></td>
 <span class='co'>#Pull the analysis dataset from </span>
 <span class='co'>#the FlatironKitchen object</span>
 <span class='va'>df</span> <span class='op'>&lt;-</span> <span class='va'>fk</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>fi_pull_data</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/FlatironKitchen/man/fi_pull_data.html'>fi_pull_data</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'>#Download the progression table belonging</span>
 <span class='co'>#to the current datamart</span>
 <span class='va'>progression</span> <span class='op'>&lt;-</span> <span class='va'>fk</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>fi_read_table</span><span class='op'>(</span>table_name<span class='op'>=</span><span class='st'>"ENHANCED_ADVNSCLCPROGRESSION"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/FlatironKitchen/man/fi_read_table.html'>fi_read_table</a></span><span class='op'>(</span>table_name<span class='op'>=</span><span class='st'>"ENHANCED_ADVNSCLCPROGRESSION"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>collect</a></span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'>#Add progression information to analysis dataset</span>
@@ -379,7 +387,7 @@ parameter values in <code>fi_calc_rwPFS</code>.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Michael Bretscher.</p>
+  <p>Developed by Michael Bretscher, Shanmugasundaram Prabhu, Nandi Kalyan.</p>
 </div>
 
 <div class="pkgdown">
