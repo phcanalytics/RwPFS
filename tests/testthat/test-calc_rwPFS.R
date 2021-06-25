@@ -159,8 +159,8 @@ test_that("calc_rwPFS validations", {
       {
         all(.$rwPFS_testing_event_type == "Progression") &
           all(.$rwPFS_testing_date == .$progression_date) &
-          all(.$rwPFS_testing_event == 1) #&
-          all(as.numeric(.$progression_date - .$start_date, unit = "days") == .$rwPFS_testing_days) #&
+          all(.$rwPFS_testing_event == 1) &
+          all(as.numeric(.$progression_date - .$start_date, unit = "days") == .$rwPFS_testing_days) &
           all(.$rwPFS_testing_months*30.4375 == .$rwPFS_testing_days)
       },
     label = "'If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is 'Progression' and event == 1, days/months is progression_date minus start_date'"
