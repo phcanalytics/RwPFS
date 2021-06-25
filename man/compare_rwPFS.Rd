@@ -37,6 +37,9 @@ Hazard ratio relative to the reference, and incremental no. of death events from
 #Note: the FlatironKitchen package is used in these
 #examples for simplicity. This is not a requirement.
 
+library(FlatironKitchen)
+library(dplyr)
+
 #Initialize FlatironKitchen object
 fk <- fi_start(datamart = "AdvancedNSCLC",
                title = "rwPFS in aNSCLC")  \%>\%

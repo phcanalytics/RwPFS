@@ -143,31 +143,39 @@ test_that("calc_rwPFS validations", {
  
   
   
-  #TODO If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is "Progression" and event == 1
+  #If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is "Progression" and event == 1
   #days/months is progression_date minus start_date
   
-  # testthat::expect_true(
-  #   mock_result %>%
-  #     dplyr::filter(!is.na(start_date) & #we need non-missing start_date
-  #                     !is.na(rwPFS_testing_eof_date) &
-  #                     !is.na(progression_date) &
-  #                     progression_date <= rwPFS_testing_eof_date & 
-  #                     rwPFS_testing_eof_date > start_date &
-  #                     progression_date > start_date)  %>%
-  #     {
-  #       all(.$rwPFS_testing_event_type == "Progression") &
-  #         all(.$rwPFS_testing_date == .$progression_date) & 
-  #         all(.$rwPFS_testing_event == 1) #& 
-  #         #all(as.numeric(.$progression_date - .$start_date, unit = "days") == .$rwPFS_testing_days) #& 
-  #         #all(is.na(.$rwPFS_testing_months))
-  #     },
-  #   label = "'If the minimum of last_activity_date, last_progression_abstraction_date, visit_gap_start_date is before start date, then all result columns must be missing'"
-  # )    
-  # 
+  testthat::expect_true(
+    mock_result %>%
+      dplyr::filter(!is.na(start_date) & #we need non-missing start_date
+                      !is.na(rwPFS_testing_eof_date) &
+                      !is.na(progression_date) &
+                      !is.na(last_activity_date) &
+                      (death_date > rwPFS_testing_eof_date | is.na(death_date)) &
+                      progression_date <= rwPFS_testing_eof_date &
+                      rwPFS_testing_eof_date > start_date &
+                      progression_date > start_date)  %>%
+      {
+        all(.$rwPFS_testing_event_type == "Progression") &
+          all(.$rwPFS_testing_date == .$progression_date) &
+          all(.$rwPFS_testing_event == 1) #&
+          all(as.numeric(.$progression_date - .$start_date, unit = "days") == .$rwPFS_testing_days) #&
+          all(.$rwPFS_testing_months*30.4375 == .$rwPFS_testing_days)
+      },
+    label = "'If progression_date is <= eof_date, then rwPFS_date is equal to progression date, and event_type is 'Progression' and event == 1, days/months is progression_date minus start_date'"
+  )
+
   
   
   #TODO else if there's no progression <= eof_date, but there's a non-missing death date within <30d after eof_date, then rwPFS date
   #must be equal to death date, event_type must be "Death", and event == 1, days/months is death_date minus start_date
+  
+  
+  
+  
+  
+  
   
   #If there's no progression <= eof_date and non-missing death date within <30d after eof_date, then rwPFS_event_type is "censored"
   #rwPFS_event == 0 , and days/months is eof_date - minus start_date
