@@ -35,6 +35,8 @@ Get started with real-world PFS [here](https://pages.github.roche.com/RWDScodesh
 
 Find this website again at [https://go.roche.com/realworldPFS](https://go.roche.com/realworldPFS)
 
- <!-- badges: start -->
-  [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental) 
-  <!-- badges: end -->
+<!-- badges: start -->
+
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+<!-- badges: end -->
