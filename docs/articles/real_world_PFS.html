@@ -82,7 +82,7 @@
       <h1 data-toc-skip>Real-world Progression-free Survival (rwPFS)</h1>
                         <h4 class="author">Michael Bretscher</h4>
             
-            <h4 class="date">2021-06-28</h4>
+            <h4 class="date">2021-06-29</h4>
       
       
       <div class="hidden name"><code>real_world_PFS.Rmd</code></div>
@@ -91,6 +91,8 @@
 
     
     
+<p><br></p>
+<p>Acknowledgements for supporting the work on rwPFS in one way or another: Robson Machado, Shivani Mhatre, Thanh Ton, Huong Trinh, Jinjoo Shim, Giovanni D’Ario, Francesca Michielin, Venus So, Xing Yang, Prabhu Shanmugasundaram, Kalyan Nandi</p>
 <p><br><br></p>
 <p><strong>Note that the vignette below is currently written for FlatironKitchen and needs to be updated. FlatironKitchen imports the present <em>realworldPFS</em> package and provides wrappers around <code>add_progression</code>, <code>calc_rwPFS</code> and <code>compare_rwPFS</code> functions, called <code>fi_add_progression</code>, <code>fi_calc_rwPFS</code>, and <code>fi_compare_rwPFS</code>, respectively.</strong></p>
 <p>For details on how the use of a <em>realworldPFS</em> function differs from the corresponding <em>FlatironKitchen</em> wrapper please consult <code>?function_name</code>.**</p>
@@ -348,7 +350,7 @@
 <span class="co">#&gt; Joining, by = "patientid"</span>
 <span class="co">#&gt; Warning : 292 patient(s) had no progression information abstracted beyond startdate (lastclinicnotedate set to missing)</span>
 <span class="co">#&gt; NewCols : progressiondate_nopseudo, lastclinicnotedate_nopseudo</span>
-<span class="co">#&gt; Time    : 11.8s [64.1 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 7.5s [56.8 s]</span></code></pre></div>
 <p>Two new columns were added: <em>progressiondate_nopseudo</em> and <em>lastclinicnotedate_nopseudo</em></p>
 <p>Note that FlatironKitchen warned us that 287 out of our 7,823 patients had no progression abstracted beyond the baseline date. This can happen if patients had no progression information abstracted at all, or their lastclinicnotedate is before our startdate. At this point we could exclude those patients since it won’t be possible to calculate rwPFS for them. However, let’s leave them for now, in order to demonstrate how the downstream functions deal with such cases.</p>
 </div>
@@ -378,7 +380,7 @@
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _no_pseudoprogression.</span>
 <span class="co">#&gt; Warning : The rwPFS variables for  377 patient(s) were set to missing. This could be due to one of the following reasons: missing lastclinicnotedate, missing date of last activity,  lastclinicnotedate equal to the startdate, or a date of death being earlier than the start date (this can happen because death dates are rounded to mid-month in Flatiron).  These could be either removed from the data, or manually censored at baseline (to preserve the distribution of baseline covariates)</span>
 <span class="co">#&gt; NewCols : rwpfs_no_pseudoprogression_eof_date, rwpfs_no_pseudoprogression_event_type, rwpfs_no_pseudoprogression_date, rwpfs_no_pseudoprogression_days, rwpfs_no_pseudoprogression_event, rwpfs_no_pseudoprogression_months</span>
-<span class="co">#&gt; Time    : 0.1s [64.1 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 0.1s [56.9 s]</span></code></pre></div>
 <p>Note the warning about some patients having been set to missing. Let’s have a closer look at those.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fk</span><span class="op">$</span><span class="va">data</span> <span class="op">%&gt;%</span> 
@@ -463,7 +465,7 @@
 <span class="co">#&gt; Note    : Code = rwPFS_no_pseudoprogression_event_type == "Missing"</span>
 <span class="co">#&gt; Excluded: 377 patients</span>
 <span class="co">#&gt; Cohort  : 7,530 patients</span>
-<span class="co">#&gt; Time    : 0s [64.2 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 0s [56.9 s]</span></code></pre></div>
 <p>Finally, let’s plot the Kaplan-Meier curve for rwPFS, stratified by histology.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fk</span> <span class="op">%&gt;%</span>
@@ -491,12 +493,12 @@
     max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
     label <span class="op">=</span> <span class="st">"_no_pseudoprogression"</span>                                  
   <span class="op">)</span> 
-<span class="co">#&gt; Time    : 0s [64.2 s]</span>
+<span class="co">#&gt; Time    : 0s [56.9 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _no_pseudoprogression.</span>
 <span class="co">#&gt; NewCols : rwpfs_no_pseudoprogression_eof_date, rwpfs_no_pseudoprogression_event_type, rwpfs_no_pseudoprogression_date, rwpfs_no_pseudoprogression_days, rwpfs_no_pseudoprogression_event, rwpfs_no_pseudoprogression_months</span>
-<span class="co">#&gt; Time    : 0s [64.2 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 0s [57 s]</span></code></pre></div>
 <p>..and plot it again</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fk</span> <span class="op">%&gt;%</span>
@@ -560,21 +562,21 @@
 <span class="co">#&gt; Touching: ENHANCED_ADVNSCLCPROGRESSION</span>
 <span class="co">#&gt; Joining, by = "patientid"</span>
 <span class="co">#&gt; NewCols : progressiondate_allevents, lastclinicnotedate_allevents</span>
-<span class="co">#&gt; Time    : 6.8s [71.1 s]</span>
+<span class="co">#&gt; Time    : 7.8s [64.8 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_progression() ────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 14 days. Require_radiographic: FALSE. Exclude_pseudoprogression: TRUE. Label: "_omit_le_14d". Expression for additional filtering of progression events: none.</span>
 <span class="co">#&gt; Touching: ENHANCED_ADVNSCLCPROGRESSION</span>
 <span class="co">#&gt; Joining, by = "patientid"</span>
 <span class="co">#&gt; NewCols : progressiondate_omit_le_14d, lastclinicnotedate_omit_le_14d</span>
-<span class="co">#&gt; Time    : 6.9s [78 s]</span>
+<span class="co">#&gt; Time    : 8.1s [72.9 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_progression() ────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: TRUE. Exclude_pseudoprogression: TRUE. Label: "_only_radiographic". Expression for additional filtering of progression events: none.</span>
 <span class="co">#&gt; Touching: ENHANCED_ADVNSCLCPROGRESSION</span>
 <span class="co">#&gt; Joining, by = "patientid"</span>
 <span class="co">#&gt; NewCols : progressiondate_only_radiographic, lastclinicnotedate_only_radiographic</span>
-<span class="co">#&gt; Time    : 7.1s [85 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 6.9s [79.7 s]</span></code></pre></div>
 <p><br></p>
 <p>We also want to look at rwPFS definitions where</p>
 <ul>
@@ -596,7 +598,7 @@
     all_na <span class="op">=</span> <span class="cn">NA_character_</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html">as.Date</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="co">#&gt; NewCols : imputed_progression_date, imputed_censoring_date, all_na</span>
-<span class="co">#&gt; Time    : 0s [85.1 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 0s [79.8 s]</span></code></pre></div>
 <p><br></p>
 <p>Now, we can calculate the different rwPFS endpoints corresponding to the above handling of progression events and LoT:</p>
 <p><br></p>
@@ -684,32 +686,32 @@
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _all_events.</span>
 <span class="co">#&gt; NewCols : rwpfs_all_events_eof_date, rwpfs_all_events_event_type, rwpfs_all_events_date, rwpfs_all_events_days, rwpfs_all_events_event, rwpfs_all_events_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.1 s]</span>
+<span class="co">#&gt; Time    : 0.1s [79.8 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _omit_le_14d.</span>
 <span class="co">#&gt; NewCols : rwpfs_omit_le_14d_eof_date, rwpfs_omit_le_14d_event_type, rwpfs_omit_le_14d_date, rwpfs_omit_le_14d_days, rwpfs_omit_le_14d_event, rwpfs_omit_le_14d_months</span>
-<span class="co">#&gt; Time    : 0s [85.2 s]</span>
+<span class="co">#&gt; Time    : 0.1s [79.9 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _only_radiographic.</span>
 <span class="co">#&gt; NewCols : rwpfs_only_radiographic_eof_date, rwpfs_only_radiographic_event_type, rwpfs_only_radiographic_date, rwpfs_only_radiographic_days, rwpfs_only_radiographic_event, rwpfs_only_radiographic_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.2 s]</span>
+<span class="co">#&gt; Time    : 0.1s [79.9 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _impute_progression.</span>
 <span class="co">#&gt; NewCols : rwpfs_impute_progression_eof_date, rwpfs_impute_progression_event_type, rwpfs_impute_progression_date, rwpfs_impute_progression_days, rwpfs_impute_progression_event, rwpfs_impute_progression_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.3 s]</span>
+<span class="co">#&gt; Time    : 0.1s [80 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _censor_at_lot_change.</span>
 <span class="co">#&gt; NewCols : rwpfs_censor_at_lot_change_eof_date, rwpfs_censor_at_lot_change_event_type, rwpfs_censor_at_lot_change_date, rwpfs_censor_at_lot_change_days, rwpfs_censor_at_lot_change_event, rwpfs_censor_at_lot_change_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.3 s]</span>
+<span class="co">#&gt; Time    : 0s [80.1 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _ignore_visit_gaps.</span>
 <span class="co">#&gt; NewCols : rwpfs_ignore_visit_gaps_eof_date, rwpfs_ignore_visit_gaps_event_type, rwpfs_ignore_visit_gaps_date, rwpfs_ignore_visit_gaps_days, rwpfs_ignore_visit_gaps_event, rwpfs_ignore_visit_gaps_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.4 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 0s [80.1 s]</span></code></pre></div>
 <p><br></p>
 <p>Now that we have all these different rwPFS endpoints, let’s compare them using <code>fi_compare_rwPFS</code>:</p>
 <p><br></p>
@@ -959,57 +961,57 @@ We can calculate rwPFS endpoints with varying window lengths as follows:</p>
     max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
     label <span class="op">=</span> <span class="st">"_90d_window"</span>                                   
   <span class="op">)</span> 
-<span class="co">#&gt; Time    : 0s [85.4 s]</span>
+<span class="co">#&gt; Time    : 0s [80.1 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 0d after end of progression follow-up. Label: _0d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_0d_window_eof_date, rwpfs_0d_window_event_type, rwpfs_0d_window_date, rwpfs_0d_window_days, rwpfs_0d_window_event, rwpfs_0d_window_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.4 s]</span>
+<span class="co">#&gt; Time    : 0s [80.2 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 10d after end of progression follow-up. Label: _10d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_10d_window_eof_date, rwpfs_10d_window_event_type, rwpfs_10d_window_date, rwpfs_10d_window_days, rwpfs_10d_window_event, rwpfs_10d_window_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.5 s]</span>
+<span class="co">#&gt; Time    : 0.1s [80.2 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 20d after end of progression follow-up. Label: _20d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_20d_window_eof_date, rwpfs_20d_window_event_type, rwpfs_20d_window_date, rwpfs_20d_window_days, rwpfs_20d_window_event, rwpfs_20d_window_months</span>
-<span class="co">#&gt; Time    : 0s [85.6 s]</span>
+<span class="co">#&gt; Time    : 0s [80.3 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _30d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_30d_window_eof_date, rwpfs_30d_window_event_type, rwpfs_30d_window_date, rwpfs_30d_window_days, rwpfs_30d_window_event, rwpfs_30d_window_months</span>
-<span class="co">#&gt; Time    : 0s [85.6 s]</span>
+<span class="co">#&gt; Time    : 0s [80.3 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 40d after end of progression follow-up. Label: _40d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_40d_window_eof_date, rwpfs_40d_window_event_type, rwpfs_40d_window_date, rwpfs_40d_window_days, rwpfs_40d_window_event, rwpfs_40d_window_months</span>
-<span class="co">#&gt; Time    : 0s [85.7 s]</span>
+<span class="co">#&gt; Time    : 0s [80.4 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 50d after end of progression follow-up. Label: _50d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_50d_window_eof_date, rwpfs_50d_window_event_type, rwpfs_50d_window_date, rwpfs_50d_window_days, rwpfs_50d_window_event, rwpfs_50d_window_months</span>
-<span class="co">#&gt; Time    : 0s [85.7 s]</span>
+<span class="co">#&gt; Time    : 0s [80.4 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 60d after end of progression follow-up. Label: _60d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_60d_window_eof_date, rwpfs_60d_window_event_type, rwpfs_60d_window_date, rwpfs_60d_window_days, rwpfs_60d_window_event, rwpfs_60d_window_months</span>
-<span class="co">#&gt; Time    : 0s [85.8 s]</span>
+<span class="co">#&gt; Time    : 0.5s [80.9 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 70d after end of progression follow-up. Label: _70d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_70d_window_eof_date, rwpfs_70d_window_event_type, rwpfs_70d_window_date, rwpfs_70d_window_days, rwpfs_70d_window_event, rwpfs_70d_window_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.8 s]</span>
+<span class="co">#&gt; Time    : 0s [80.9 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 80d after end of progression follow-up. Label: _80d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_80d_window_eof_date, rwpfs_80d_window_event_type, rwpfs_80d_window_date, rwpfs_80d_window_days, rwpfs_80d_window_event, rwpfs_80d_window_months</span>
-<span class="co">#&gt; Time    : 0.1s [85.9 s]</span>
+<span class="co">#&gt; Time    : 0s [81 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_rwPFS() ──────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 90d after end of progression follow-up. Label: _90d_window.</span>
 <span class="co">#&gt; NewCols : rwpfs_90d_window_eof_date, rwpfs_90d_window_event_type, rwpfs_90d_window_date, rwpfs_90d_window_days, rwpfs_90d_window_event, rwpfs_90d_window_months</span>
-<span class="co">#&gt; Time    : 0s [85.9 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 0s [81 s]</span></code></pre></div>
 <p><br></p>
 <p>and then compare them like before, but this time adding an ‘incremental deaths’ column to the output, indicating how many additional deaths are captured by extending the window by 10 more days</p>
 <p><br></p>
@@ -1180,12 +1182,12 @@ We can calculate rwPFS endpoints with varying window lengths as follows:</p>
 <span class="co">#&gt; #   [bretscm2@redshift-01-eu.dap.apollo.roche.com:5439/flatiron_edm]</span>
 <span class="co">#&gt;   patientid progressiondate isradiographice… ispathologicevi… isclinicalasses…</span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;date&gt;          &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 F017650D… 2014-04-23      Yes              No               No              </span>
-<span class="co">#&gt; 2 F017738B… NA              &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
-<span class="co">#&gt; 3 F01786FC… 2019-01-22      Yes              Yes              No              </span>
-<span class="co">#&gt; 4 F0178E12… NA              &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
-<span class="co">#&gt; 5 F0179462… 2013-06-22      Yes              No               No              </span>
-<span class="co">#&gt; 6 F0179E1F… 2020-01-30      Yes              No               No              </span>
+<span class="co">#&gt; 1 F040824F… 2017-07-06      Yes              No               No              </span>
+<span class="co">#&gt; 2 F040824F… 2017-09-11      Yes              No               No              </span>
+<span class="co">#&gt; 3 F04086BF… 2012-10-04      Yes              Yes              No              </span>
+<span class="co">#&gt; 4 F04086BF… 2013-02-25      Yes              No               No              </span>
+<span class="co">#&gt; 5 F04086BF… 2013-11-06      Yes              No               No              </span>
+<span class="co">#&gt; 6 F04086BF… 2014-02-13      Yes              No               No              </span>
 <span class="co">#&gt; # … with 3 more variables: ismixedresponse &lt;chr&gt;,</span>
 <span class="co">#&gt; #   ispseudoprogressionmentioned &lt;chr&gt;, lastclinicnotedate &lt;date&gt;</span></code></pre></div>
 <p><br></p>
@@ -1220,21 +1222,21 @@ We can calculate rwPFS endpoints with varying window lengths as follows:</p>
       label <span class="op">=</span> <span class="st">"_prog_filter_expression"</span>,                  
       prog_filter_expression <span class="op">=</span> <span class="st">"isradiographicevidence == 'Yes' &amp;  ispseudoprogressionmentioned == 'No'"</span>     
   <span class="op">)</span>
-<span class="co">#&gt; Time    : 0s [85.9 s]</span>
+<span class="co">#&gt; Time    : 0s [81 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_progression() ────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: TRUE. Exclude_pseudoprogression: TRUE. Label: "_radio_nopseudo". Expression for additional filtering of progression events: none.</span>
 <span class="co">#&gt; Touching: ENHANCED_ADVNSCLCPROGRESSION</span>
 <span class="co">#&gt; Joining, by = "patientid"</span>
 <span class="co">#&gt; NewCols : progressiondate_radio_nopseudo, lastclinicnotedate_radio_nopseudo</span>
-<span class="co">#&gt; Time    : 7.1s [93 s]</span>
+<span class="co">#&gt; Time    : 7s [88 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_progression() ────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: FALSE. Exclude_pseudoprogression: FALSE. Label: "_prog_filter_expression". Expression for additional filtering of progression events: "isradiographicevidence == 'Yes' &amp;  ispseudoprogressionmentioned == 'No'"</span>
 <span class="co">#&gt; Touching: ENHANCED_ADVNSCLCPROGRESSION</span>
 <span class="co">#&gt; Joining, by = "patientid"</span>
 <span class="co">#&gt; NewCols : progressiondate_prog_filter_expression, lastclinicnotedate_prog_filter_expression</span>
-<span class="co">#&gt; Time    : 6.9s [99.9 s]</span>
+<span class="co">#&gt; Time    : 7.3s [95.3 s]</span>
   
   <span class="co">#This is to demonstrate that the two ways are exactly equivalent</span>
   <span class="va">fk</span> <span class="op">%&gt;%</span>
@@ -1257,7 +1259,7 @@ As we can see, the two ways of filtering progression events are equivalent. <br>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_create() ─────────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : FlatironKitchen  v1.0.8 'Tiramisu'</span>
-<span class="co">#&gt; Argument: title = 'bretscm2's 2021-06-28 MetastaticBreastCancer kitchen'</span>
+<span class="co">#&gt; Argument: title = 'bretscm2's 2021-06-29 MetastaticBreastCancer kitchen'</span>
 <span class="co">#&gt; Note    : Using the latest Flatiron delivery: May-21</span>
 <span class="co">#&gt; Argument: year_month = '2021_05'</span>
 <span class="co">#&gt; </span>
@@ -1266,33 +1268,33 @@ As we can see, the two ways of filtering progression events are equivalent. <br>
 <span class="co">#&gt; Warning : 906 (3.5%) patients appear in at least one other enhanced cohort.</span>
 <span class="co">#&gt; Cohort  : 25,562 patients</span>
 <span class="co">#&gt; NewCols : patientid, diagnosisdate, metdiagnosisdate, groupstage, multiple</span>
-<span class="co">#&gt; Time    : 1.1s [1.1 s]</span>
+<span class="co">#&gt; Time    : 0.9s [0.9 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_demographics() ───────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Touching: DEMOGRAPHICS</span>
 <span class="co">#&gt; NewCols : practiceid, practicetype, primaryphysicianid, birthyear, gender, race, ethnicity, state</span>
-<span class="co">#&gt; Time    : 0.3s [1.4 s]</span>
+<span class="co">#&gt; Time    : 0.3s [1.2 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_calc_region() ────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : Using State -&gt; Region mapping = 'phc'</span>
 <span class="co">#&gt; NewCols : region</span>
-<span class="co">#&gt; Time    : 0s [1.5 s]</span>
+<span class="co">#&gt; Time    : 0s [1.2 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_calc_raceethnicity() ─────────────────────────────────────────────────── </span>
 <span class="co">#&gt; NewCols : raceethnicity</span>
-<span class="co">#&gt; Time    : 0s [1.5 s]</span>
+<span class="co">#&gt; Time    : 0s [1.2 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_mortality() ──────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Argument: impute_method = '15'</span>
 <span class="co">#&gt; Touching: ENHANCED_MORTALITY</span>
 <span class="co">#&gt; Warning : 11 (0.1%) patient(s) had DateOfDeath values unlike YYYY-MM and will be set to missing</span>
 <span class="co">#&gt; NewCols : dateofdeath</span>
-<span class="co">#&gt; Time    : 0.3s [1.8 s]</span>
+<span class="co">#&gt; Time    : 0.3s [1.5 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_calc_death() ─────────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Argument: method = 'non_miss_dod'</span>
 <span class="co">#&gt; NewCols : death</span>
-<span class="co">#&gt; Time    : 0s [1.8 s]</span>
+<span class="co">#&gt; Time    : 0s [1.5 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_add_lastdates() ──────────────────────────────────────────────────────── </span>
 <span class="co">#&gt; Touching: VISIT</span>
@@ -1300,17 +1302,17 @@ As we can see, the two ways of filtering progression events are equivalent. <br>
 <span class="co">#&gt; Touching: LAB</span>
 <span class="co">#&gt; Touching: VITALS</span>
 <span class="co">#&gt; NewCols : lastvisitdate, lastadmindate, lastlabdate, lastvitalsdate</span>
-<span class="co">#&gt; Time    : 2.1s [3.9 s]</span>
+<span class="co">#&gt; Time    : 1.1s [2.6 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_calc_lastactivity_date() ─────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : lastactivitydate = max(lastvisitdate, lastadmindate, lastlabdate, lastvitalsdate, enddate)</span>
 <span class="co">#&gt; NewCols : enddate, lastactivitydate</span>
-<span class="co">#&gt; Time    : 0.3s [4.2 s]</span>
+<span class="co">#&gt; Time    : 0.3s [2.8 s]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── fi_calc_lastcontact_date() ──────────────────────────────────────────────── </span>
 <span class="co">#&gt; Note    : lastcontactdate = max(dateofdeath, lastvisitdate, lastadmindate, lastlabdate, lastvitalsdate)</span>
 <span class="co">#&gt; NewCols : lastcontactdate</span>
-<span class="co">#&gt; Time    : 0s [4.3 s]</span>
+<span class="co">#&gt; Time    : 0s [2.9 s]</span>
 
 <span class="va">fk2</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_read_table.html">fi_read_table</a></span><span class="op">(</span>table_name <span class="op">=</span> <span class="st">"ENHANCED_METBREASTPROGRESSION"</span><span class="op">)</span> <span class="op">%&gt;%</span>
@@ -1320,12 +1322,12 @@ As we can see, the two ways of filtering progression events are equivalent. <br>
 <span class="co">#&gt; #   [bretscm2@redshift-01-eu.dap.apollo.roche.com:5439/flatiron_edm]</span>
 <span class="co">#&gt;   patientid progressiondate isradiographice… ispathologicevi… isclinicalasses…</span>
 <span class="co">#&gt;   &lt;chr&gt;     &lt;date&gt;          &lt;chr&gt;            &lt;chr&gt;            &lt;chr&gt;           </span>
-<span class="co">#&gt; 1 F0261E4B… 2018-07-27      Yes              No               No              </span>
-<span class="co">#&gt; 2 F0269319… 2015-05-11      Yes              No               No              </span>
-<span class="co">#&gt; 3 F026D653… 2017-10-25      Yes              No               No              </span>
-<span class="co">#&gt; 4 F026D653… 2018-01-18      Yes              No               No              </span>
-<span class="co">#&gt; 5 F026D653… 2018-03-07      Yes              No               No              </span>
-<span class="co">#&gt; 6 F026D653… 2018-11-04      Yes              No               No              </span>
+<span class="co">#&gt; 1 F0AAB4A3… 2021-01-25      Yes              No               No              </span>
+<span class="co">#&gt; 2 F0AABEA1… 2016-03-03      Yes              No               No              </span>
+<span class="co">#&gt; 3 F0AACBCA… 2020-01-22      Yes              No               No              </span>
+<span class="co">#&gt; 4 F0AAF690… 2017-03-28      Yes              Yes              No              </span>
+<span class="co">#&gt; 5 F0AAFF4E… 2017-09-29      Yes              Yes              No              </span>
+<span class="co">#&gt; 6 F0AB2484… NA              &lt;NA&gt;             &lt;NA&gt;             &lt;NA&gt;            </span>
 <span class="co">#&gt; # … with 5 more variables: isphysicalexamevidence &lt;chr&gt;,</span>
 <span class="co">#&gt; #   istumormarkersonly &lt;chr&gt;, ismixedresponse &lt;chr&gt;,</span>
 <span class="co">#&gt; #   ispseudoprogressionmentioned &lt;chr&gt;, lastclinicnotedate &lt;date&gt;</span></code></pre></div>
@@ -1349,7 +1351,7 @@ As we can see, the two ways of filtering progression events are equivalent. <br>
 <span class="co">#&gt; Joining, by = "patientid"</span>
 <span class="co">#&gt; Warning : 3097 patient(s) had no progression information abstracted beyond startdate (lastclinicnotedate set to missing)</span>
 <span class="co">#&gt; NewCols : progressiondate, lastclinicnotedate</span>
-<span class="co">#&gt; Time    : 30.8s [35 s]</span></code></pre></div>
+<span class="co">#&gt; Time    : 27.2s [30.1 s]</span></code></pre></div>
 <p><br></p>
 <p>In this manner we can use <code>fi_add_progression</code> with any progression table that has a <code>progressiondate</code> and a <code>lastclinicnotedate</code> column.</p>
 <p><br></p>

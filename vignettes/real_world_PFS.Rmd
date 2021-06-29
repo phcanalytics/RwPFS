@@ -37,6 +37,10 @@ knitr::opts_chunk$set(
 
 ```
 
+<br/>
+
+Acknowledgements for supporting the work on rwPFS in one way or another: Robson Machado, Shivani Mhatre, Thanh Ton, Huong Trinh, Jinjoo Shim, Giovanni D’Ario, Francesca Michielin, Venus So, Xing Yang, Prabhu Shanmugasundaram, Kalyan Nandi
+
 
 <br/>
 <br/>
