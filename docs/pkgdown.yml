@@ -1,0 +1,10 @@
+pandoc: 2.11.2
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  real_world_PFS: real_world_PFS.html
+last_built: 2021-06-29T13:47Z
+urls:
+  reference: https://github.roche.com/RWDScodeshare/realworldPFS//reference
+  article: https://github.roche.com/RWDScodeshare/realworldPFS//articles
+

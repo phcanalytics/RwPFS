@@ -1,0 +1,34 @@
+Package: realworldPFS
+Title: Calculate and compare a range of real-world PFS definitions
+Version: 0.0.2
+Authors@R: c( 
+    person(given = "Michael", family = "Bretscher", role = c("aut", "cre"), email = "michael.bretscher@roche.com"),
+    person("Shanmugasundaram", "Prabhu", email = "shanmup3@gene.com", role = "aut"),
+    person("Nandi", "Kalyan", email = "nandik@gene.com", role = "aut"))
+Description: Calculate and compare a range of real-world PFS endpoints from Flatiron and other real-world data sources.
+BugReports: https://github.roche.com/RWDScodeshare/realworldPFS/issues/
+License: Copyright Roche
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports:
+    rlang,
+    dplyr (>= 1.0.0),
+    lubridate,
+    tidyr,
+    stringr,
+    readr,
+    survival,
+    survminer,
+    broom,
+    purrr,
+    stats
+Suggests:
+    FlatironKitchen,
+    RocheData,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Config/testthat/edition: 3
