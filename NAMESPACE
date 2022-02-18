@@ -2,4 +2,3 @@
 
 export(calc_rwPFS)
 export(compare_rwPFS)
-export(filter_progression)
