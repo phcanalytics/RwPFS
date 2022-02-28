@@ -1,4 +1,4 @@
 library(testthat)
-library(realworldPFS)
+library(RwPFS)
 
-test_check("realworldPFS")
+test_check("RwPFS")

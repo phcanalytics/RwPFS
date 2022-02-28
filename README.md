@@ -4,9 +4,11 @@
 
 <br/>
 
->Calculate & compare a range of real-world PFS endpoints (with varying definitions)
->
->Can be used with Flatiron or other real-world data sources
+
+> Progression-free survival (PFS) is an important endpoint in clinical oncology trials. 
+> Multiple definitions of PFS are possible in real-world data (rwPFS). 
+> The RwPFS package provides tools to calculate and easily compare real-world PFS endpoints across a range of definitions.
+
 
 <br/>
 <br/>
@@ -14,7 +16,8 @@
 You can install the most recent release:
 
 ``` r
-devtools::install_git("https://github.roche.com/RWDScodeshare/realworldPFS", 
+
+devtools::install_git("https://github.com/phcanalytics/RwPFS", 
                       ref = "v0.0.2")  
 ```
 
@@ -23,20 +26,21 @@ devtools::install_git("https://github.roche.com/RWDScodeshare/realworldPFS",
 Or, alternatively, the most recent (development) version:
 
 ``` r
-devtools::install_git("https://github.roche.com/RWDScodeshare/realworldPFS") 
+devtools::install_git("https://github.com/phcanalytics/RwPFS") 
 ```
 
 <br/>
 <br/>
 
-Get started with real-world PFS [here](https://pages.github.roche.com/RWDScodeshare/realworldPFS/articles/real_world_PFS.html)
+
+Get started with real-world PFS [here](https://pages.github.com/phcanalytics/RwPFS/articles/real_world_PFS.html)
 
 <br/>
 
-Find this website again at [https://go.roche.com/realworldPFS](https://go.roche.com/realworldPFS)
 
 <!-- badges: start -->
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-<!-- badges: end -->
+
+
