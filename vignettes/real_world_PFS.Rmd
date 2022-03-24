@@ -4,8 +4,6 @@ author: "Michael Bretscher"
 date: "`r Sys.Date()`"
 bibliography: references.bib 
 output: rmarkdown::html_vignette
-#output: word_document
-#output: rmarkdown::md_document
 vignette: >
   %\VignetteIndexEntry{Real-world Progression-free Survival (rwPFS)}
   %\VignetteEngine{knitr::rmarkdown}
@@ -25,7 +23,7 @@ library(knitr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE,  # set to TRUE for running vignette (but must remove dependence on Flatironkitchen)
+  eval = FALSE,  # set to TRUE for running vignette (but must remove dependence on FK)
   echo = TRUE,         # echo code?
   message = TRUE,     # Show messages
   warning = TRUE,     # Show warnings
@@ -35,93 +33,67 @@ knitr::opts_chunk$set(
   fig.align = "center"
 )
 
+
+#Run this code to build vignettes & make them accessible through R help - also when installing from git
+# tools::buildVignettes(dir = ".", tangle=TRUE)
+# dir.create("inst/doc")
+# file.copy(dir("vignettes", full.names=TRUE), "inst/doc", overwrite=TRUE)
+# ..and push the changes to git..
+#From: https://community.rstudio.com/t/browsevignettes-mypackage-saying-no-vignettes-found/68656/7
+
 ```
 
-<br/>
 
-Acknowledgements for supporting the work on rwPFS in one way or another: Robson Machado, Shivani Mhatre, Thanh Ton, Huong Trinh, Jinjoo Shim, Giovanni D’Ario, Francesca Michielin, Venus So, Xing Yang, Prabhu Shanmugasundaram, Kalyan Nandi
-
+*The background section gives some general context on using real-world Progression-free Survival as endpoint in oncology - if you just want to know about using the RwPFS package feel free to skip ahead to [Getting started with RwPFS](#getting-started-with-rwpfs)* 
 
 <br/>
-<br/>
-
-**Note that the vignette below is currently written for FlatironKitchen and needs to be updated. FlatironKitchen imports the 
-present *realworldPFS* package and provides wrappers around `add_progression`, `calc_rwPFS` and `compare_rwPFS` functions, called 
-`fi_add_progression`, `fi_calc_rwPFS`, and `fi_compare_rwPFS`, respectively.**
-
-
-For details on how the use of a *realworldPFS* function differs from the corresponding *FlatironKitchen* wrapper please consult `?function_name`.**
-
-
+*For a detailed discussion of the rwPFS endpoint see @rwPFS_OAK*
 <br/>
 <br/>
 
-
-**Feel free to skip the background section if just looking for how to use the software - if conducting an actual analysis, we recommend to read it in order to understand the pitfalls of using rwPFS**
-
-<br/>
-<br/>
 
 # Background on rwPFS
 
 
-Progression-free Survival (PFS) is a commonly used time-to event endpoint in cancer trials. It is defined as the first event of either death or progression, 
-whichever occurs first.
+Progression-free Survival (PFS) is a commonly used time-to event endpoint in cancer trials. It is defined as the first event of either death or progression.
 
-An important difference between PFS and Overall Survival (OS) endpoints is that PFS requires close follow-up of patients, whereas OS does not. 
+An important difference between the PFS and Overall Survival (OS, time to death) endpoints is that PFS requires close follow-up of patients, whereas OS does not. 
 This is because death is a one-time event, and whenever a patient is contacted alive, we know that death had not occurred previously. This is not the case when looking at progression, hence patients must be closely monitored.
 
 <br/>
 
 **The mechanisms of data-collection differ between real-world data & clinical trials [@rwPFS_OAK]:**
 
-- In clinical trials, tumor assessments are commonly scheduled at regular intervals, and progression is assessed using standardized criteria. The reason for collecting PFS data in clinical trials is commonly to measure efficacy. Transparency and consistency of the data collection process is emphasized.
+- In clinical trials, tumor assessments are scheduled at regular intervals, and progression is assessed using standardized criteria. The reason for collecting PFS data in clinical trials is to measure treatment efficacy. Transparency and consistency of the data collection process are emphasized.
 
-- In routine health care, there is no protocol and hence no scheduled tumor assessments nor standardized criteria for assessing progression. Physicians may primarily measure progression in order to make treatment decisions, not to measure effectiveness. In addition, transparency and consistency of data collection are likely to be less important objectives than cost considerations or minimization of discomfort for the patient (e.g. by avoiding unnecessary scans).
-
-
-<br/>
-
-Because of these differences, it appears sensible to speak of "real-world PFS" (**rwPFS**) and to treat it as distinct from trial PFS. 
-
-However, due to the highly similar definitions of rwPFS and PFS, it is possible that the two endpoints may be *exchangeable*, meaning they essentially lead to the same result and could be used to compare effectivness of treatments both within a particular real-world data source as well as between trial and real-world data.
+- In routine health care, there is commonly no protocol and no regularly scheduled tumor assessments. Progression may or may not be assessed following standard criteria - this is generally not known. Physicians may measure progression mainly in order to make treatment decisions, not to statistically compare the effectiveness of different treatments. In addition, transparency and consistency of data collection are likely to be less important objectives than cost considerations or minimization of discomfort for the patient (e.g. by avoiding unnecessary scans).
 
 
 <br/>
 
-> Whether or not **PFS** and **rwPFS** endpoints are **exchangeable** and can be used for comparing drug efficacy across two data sets (real-world and 
-> clinical trial) may depend on indication, drug category, real-world database, and other factors. While attempts should be made to 
+Because of these differences, it appears sensible to speak of "real-world PFS" (**rwPFS**) and to treat it as a separate endpoint, distinct from trial PFS. However, due to the highly similar definitions of rwPFS and PFS, it is possible that the two endpoints may be *equivalent*, meaning they essentially lead to the same result and could be used to compare effectivness of treatments both within a particular real-world data source as well as between trial and real-world data.
+
+
+<br/>
+
+> Whether or not **PFS** and **rwPFS** endpoints are **equivalent** and can be used for comparing drug efficacy across two data sets (real-world and 
+> clinical trial) may depend on type of cancer, drug category, real-world database, and other factors. While attempts should be made to 
 > understand and ensure quality of data collection in the real-world data, this will likely never be perfect. Consequently, empirical confirmation
-> of exchangeability of rwPFS and PFS will be needed. This can be done by replicating trial arms and comparing rwPFS and trial PFS outcomes 
+> of the equivalence of rwPFS and PFS will be needed. This can be done by replicating trial arms and comparing rwPFS and trial PFS outcomes 
 > [@rwPFS_OAK; @EC_impowers], across indications and drug categories.
 
-<br/>
-
-## Publications assessing exchangeability of rwPFS and trial PFS
-
-The following publications assess exchangeability of rwPFS and PFS:
-
-- @EC_impowers : aNSCLC chemotherapy
-
-- @rwPFS_OAK (in preparation): aNSCLC chemotherapy and immunotherapy
-
-
-
-Please help complete this list by [suggesting additional articles](https://github.roche.com/RWDScodeshare/FlatironKitchen/issues/new)
-  
-  
 
 
 ## Algorithm for calculating rwPFS using Flatiron data 
 
 
-The schematic below illustrates the important elements required for calculating a rwPFS endpoint:
+Figure 1 in @rwPFS_OAK illustrates the important elements required for calculating a rwPFS endpoint:
 
 - the start date (baseline) 
 
-- 'lastclinicnotedate', the date up to which progression was abstracted from clinical notes
+- the date up to which progression was abstracted from clinical notes
 
-- the dates of any progression events of interest (may be a subset of events)
+- the dates of any progression events of interest
 
 - the date of death, if present
 
@@ -129,22 +101,11 @@ The schematic below illustrates the important elements required for calculating 
 
 - the presence of potential visit gaps (not shown), indicating that the patient may not have been followed for progression due to prolonged absence from the clinic in the Flatiron network (e.g. >90d). 
 
-- a time window after the end of progression follow-up where death events are to be captured. This is required because patients often leave the Flatiron network shortly before dying. If the time window is too small, there will almost exclusively be progression events. If the window is too large, more deaths are captured, but at the same time the risk of missing any progression events increases. Therefore, a pragmatic choice in the middle will have to be made. More on this point later.
+- a time window after the end of progression follow-up where death events are to be captured. This is required to avoid informative censoring because it is not uncommon that data on progression ceases to be collected shortly before death of a patient. If the time window is too small, there will almost exclusively be progression events. If the window is too large, more deaths are captured, but at the same time the risk of missing any progression events increases. Therefore, a pragmatic choice in the middle will have to be made. More on this point later.
+
 
 <br/>
-<br/>
-  
-```{r, echo = FALSE, out.width = "115%", fig.align = "left"}
-
-#knitr::include_graphics("https://github.roche.com/RWDScodeshare/FlatironKitchen/blob/master/inst/img/schema_real_world_pfs.png?raw=true")
-
-knitr::include_graphics("https://github.roche.com/RWDScodeshare/FlatironKitchen/blob/rwPFS_MichaelB/inst/img/schema_real_world_pfs.png?raw=true")
-
-
-
-```
-
-<br/>
+The RwPFS package uses the algorithm below to calucate rwPFS endpoints.
 <br/>  
   
 
@@ -156,7 +117,7 @@ knitr::include_graphics("https://github.roche.com/RWDScodeshare/FlatironKitchen/
 >    
 >       - the start of a long gap between visits (e.g. >90d)
 >   
->       - the date of last progression abstraction ('lastclinicnotedate')
+>       - the date of last progression abstraction
 >   
 >       - the date of last structured activity in the database
 >  
@@ -191,7 +152,7 @@ knitr::include_graphics("https://github.roche.com/RWDScodeshare/FlatironKitchen/
 **Multiple possible definitions of rwPFS can be specified based on the elements mentioned above:** 
   
   
-  - **different subsets of progression events in Flatiron's *progression* table could be used**, e.g. only radiographically confirmed progression events, or only progression events that occur more than 14 days after baseline (as per Flatiron recommendation)
+  - **different subsets of progression events could be used**, e.g. only radiographically confirmed progression events, or only progression events that occur more than 14 days after baseline
   
   - **different possibilities exist to handle changes in the line of therapy (LoT):** one could either
   
@@ -205,9 +166,9 @@ knitr::include_graphics("https://github.roche.com/RWDScodeshare/FlatironKitchen/
   
     - the aim is to capture most of - and only - the death events correlated in time with the end of follow-up.
     
-    - this is reminiscent of informative censoring - except events after the *end of follow-up* can be assessed and potentially included.
+    - this is reminiscent of informative censoring - except in this case events occurring after the *end of follow-up* can be accessed and potentially included.
     
-    - reasonable values for the length of the time window can be argued based on comparison with data collection in trials, or - in a data-driven way - by inspecting the drop in death events as the window is being extended (see best practices below). For a detailed discussion see @rwPFS_OAK 
+    - reasonable values for the length of the time window can be argued based on comparison with data collection in trials, or - in a data-driven way by inspecting the drop in the number of death events as the window is being extended (see best practices below). For a detailed discussion see @rwPFS_OAK 
     
     - ultimately, any choice will remain arbitrary to some extent.
     
@@ -243,9 +204,9 @@ To promote the emergence of standard rwPFS definitions and comparability across 
 <br/>
 <br/>
 
+TODO: continue here
 
-
-# The basics: adding rwPFS
+# Getting started with RwPFS
   
   
 To start, we will add a rwPFS variable to our FlatironKitchen dataset. For simplicity, we will use the rwPFS definition used in @rwPFS_OAK and @EC_impowers:
