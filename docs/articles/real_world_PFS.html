@@ -78,7 +78,7 @@
       <h1 data-toc-skip>Real-world Progression-free Survival (rwPFS)</h1>
                         <h4 data-toc-skip class="author">Michael Bretscher</h4>
             
-            <h4 data-toc-skip class="date">2022-03-15</h4>
+            <h4 data-toc-skip class="date">2022-03-24</h4>
       
       
       <div class="hidden name"><code>real_world_PFS.Rmd</code></div>
@@ -87,54 +87,39 @@
 
     
     
-<p><br><br></p>
-<p><strong>Feel free to skip the background section if just looking for how to use the software - if conducting an actual analysis, we recommend to read it in order to understand the pitfalls of using rwPFS</strong></p>
-<p><br><br></p>
+<p><em>The background section gives some general context on using real-world Progression-free Survival as endpoint in oncology - if you just want to know about using the RwPFS package feel free to skip ahead to <a href="#getting-started-with-rwpfs">Getting started with RwPFS</a></em></p>
+<p><br><em>For a detailed discussion of the rwPFS endpoint see <span class="citation">Mhatre (2021)</span></em> <br><br></p>
 <div class="section level1">
 <h1 id="background-on-rwpfs">Background on rwPFS<a class="anchor" aria-label="anchor" href="#background-on-rwpfs"></a>
 </h1>
-<p>Progression-free Survival (PFS) is a commonly used time-to event endpoint in cancer trials. It is defined as the first event of either death or progression, whichever occurs first.</p>
-<p>An important difference between PFS and Overall Survival (OS) endpoints is that PFS requires close follow-up of patients, whereas OS does not. This is because death is a one-time event, and whenever a patient is contacted alive, we know that death had not occurred previously. This is not the case when looking at progression, hence patients must be closely monitored.</p>
+<p>Progression-free Survival (PFS) is a commonly used time-to event endpoint in cancer trials. It is defined as the first event of either death or progression.</p>
+<p>An important difference between the PFS and Overall Survival (OS, time to death) endpoints is that PFS requires close follow-up of patients, whereas OS does not. This is because death is a one-time event, and whenever a patient is contacted alive, we know that death had not occurred previously. This is not the case when looking at progression, hence patients must be closely monitored.</p>
 <p><br></p>
 <p><strong>The mechanisms of data-collection differ between real-world data &amp; clinical trials <span class="citation">(Mhatre 2021)</span>:</strong></p>
 <ul>
-<li><p>In clinical trials, tumor assessments are commonly scheduled at regular intervals, and progression is assessed using standardized criteria. The reason for collecting PFS data in clinical trials is commonly to measure efficacy. Transparency and consistency of the data collection process is emphasized.</p></li>
-<li><p>In routine health care, there is no protocol and hence no scheduled tumor assessments nor standardized criteria for assessing progression. Physicians may primarily measure progression in order to make treatment decisions, not to measure effectiveness. In addition, transparency and consistency of data collection are likely to be less important objectives than cost considerations or minimization of discomfort for the patient (e.g. by avoiding unnecessary scans).</p></li>
+<li><p>In clinical trials, tumor assessments are scheduled at regular intervals, and progression is assessed using standardized criteria. The reason for collecting PFS data in clinical trials is to measure treatment efficacy. Transparency and consistency of the data collection process are emphasized.</p></li>
+<li><p>In routine health care, there is commonly no protocol and no regularly scheduled tumor assessments. Progression may or may not be assessed following standard criteria - this is generally not known. Physicians may measure progression mainly in order to make treatment decisions, not to statistically compare the effectiveness of different treatments. In addition, transparency and consistency of data collection are likely to be less important objectives than cost considerations or minimization of discomfort for the patient (e.g. by avoiding unnecessary scans).</p></li>
 </ul>
 <p><br></p>
-<p>Because of these differences, it appears sensible to speak of “real-world PFS” (<strong>rwPFS</strong>) and to treat it as distinct from trial PFS.</p>
-<p>However, due to the highly similar definitions of rwPFS and PFS, it is possible that the two endpoints may be <em>exchangeable</em>, meaning they essentially lead to the same result and could be used to compare effectivness of treatments both within a particular real-world data source as well as between trial and real-world data.</p>
+<p>Because of these differences, it appears sensible to speak of “real-world PFS” (<strong>rwPFS</strong>) and to treat it as a separate endpoint, distinct from trial PFS. However, due to the highly similar definitions of rwPFS and PFS, it is possible that the two endpoints may be <em>equivalent</em>, meaning they essentially lead to the same result and could be used to compare effectivness of treatments both within a particular real-world data source as well as between trial and real-world data.</p>
 <p><br></p>
 <blockquote>
-<p>Whether or not <strong>PFS</strong> and <strong>rwPFS</strong> endpoints are <strong>exchangeable</strong> and can be used for comparing drug efficacy across two data sets (real-world and clinical trial) may depend on indication, drug category, real-world database, and other factors. While attempts should be made to understand and ensure quality of data collection in the real-world data, this will likely never be perfect. Consequently, empirical confirmation of exchangeability of rwPFS and PFS will be needed. This can be done by replicating trial arms and comparing rwPFS and trial PFS outcomes <span class="citation">(Mhatre 2021; Ton 2021)</span>, across indications and drug categories.</p>
+<p>Whether or not <strong>PFS</strong> and <strong>rwPFS</strong> endpoints are <strong>equivalent</strong> and can be used for comparing drug efficacy across two data sets (real-world and clinical trial) may depend on type of cancer, drug category, real-world database, and other factors. While attempts should be made to understand and ensure quality of data collection in the real-world data, this will likely never be perfect. Consequently, empirical confirmation of the equivalence of rwPFS and PFS will be needed. This can be done by replicating trial arms and comparing rwPFS and trial PFS outcomes <span class="citation">(Mhatre 2021; Ton 2021)</span>, across indications and drug categories.</p>
 </blockquote>
-<p><br></p>
-<div class="section level2">
-<h2 id="publications-assessing-exchangeability-of-rwpfs-and-trial-pfs">Publications assessing exchangeability of rwPFS and trial PFS<a class="anchor" aria-label="anchor" href="#publications-assessing-exchangeability-of-rwpfs-and-trial-pfs"></a>
-</h2>
-<p>The following publications assess exchangeability of rwPFS and PFS:</p>
-<ul>
-<li><p><span class="citation">Ton (2021)</span> : aNSCLC chemotherapy</p></li>
-<li><p><span class="citation">Mhatre (2021)</span> (in preparation): aNSCLC chemotherapy and immunotherapy</p></li>
-</ul>
-<p>Please help complete this list by <a href="https://github.roche.com/RWDScodeshare/FlatironKitchen/issues/new" class="external-link">suggesting additional articles</a></p>
-</div>
 <div class="section level2">
 <h2 id="algorithm-for-calculating-rwpfs-using-flatiron-data">Algorithm for calculating rwPFS using Flatiron data<a class="anchor" aria-label="anchor" href="#algorithm-for-calculating-rwpfs-using-flatiron-data"></a>
 </h2>
-<p>The schematic below illustrates the important elements required for calculating a rwPFS endpoint:</p>
+<p>Figure 1 in <span class="citation">Mhatre (2021)</span> illustrates the important elements required for calculating a rwPFS endpoint:</p>
 <ul>
 <li><p>the start date (baseline)</p></li>
-<li><p>‘lastclinicnotedate,’ the date up to which progression was abstracted from clinical notes</p></li>
-<li><p>the dates of any progression events of interest (may be a subset of events)</p></li>
+<li><p>the date up to which progression was abstracted from clinical notes</p></li>
+<li><p>the dates of any progression events of interest</p></li>
 <li><p>the date of death, if present</p></li>
 <li><p>the date of a patient’s last structured activity in the database</p></li>
 <li><p>the presence of potential visit gaps (not shown), indicating that the patient may not have been followed for progression due to prolonged absence from the clinic in the Flatiron network (e.g. &gt;90d).</p></li>
-<li><p>a time window after the end of progression follow-up where death events are to be captured. This is required because patients often leave the Flatiron network shortly before dying. If the time window is too small, there will almost exclusively be progression events. If the window is too large, more deaths are captured, but at the same time the risk of missing any progression events increases. Therefore, a pragmatic choice in the middle will have to be made. More on this point later.</p></li>
+<li><p>a time window after the end of progression follow-up where death events are to be captured. This is required to avoid informative censoring because it is not uncommon that data on progression ceases to be collected shortly before death of a patient. If the time window is too small, there will almost exclusively be progression events. If the window is too large, more deaths are captured, but at the same time the risk of missing any progression events increases. Therefore, a pragmatic choice in the middle will have to be made. More on this point later.</p></li>
 </ul>
-<p><br><br></p>
-<p><img src="https://github.roche.com/RWDScodeshare/FlatironKitchen/blob/rwPFS_MichaelB/inst/img/schema_real_world_pfs.png?raw=true" width="115%" style="display: block; margin: auto auto auto 0;"></p>
-<p><br><br></p>
+<p><br> The RwPFS package uses the algorithm below to calucate rwPFS endpoints. <br></p>
 <blockquote>
 <p><strong>A general algorithm for calculation of rwPFS consists of the following steps:</strong></p>
 <ol style="list-style-type: decimal">
@@ -143,7 +128,7 @@
 <p>It begins at baseline and ends at one of the following, whichever occurs first:</p>
 <ul>
 <li><p>the start of a long gap between visits (e.g. &gt;90d)</p></li>
-<li><p>the date of last progression abstraction (‘lastclinicnotedate’)</p></li>
+<li><p>the date of last progression abstraction</p></li>
 <li><p>the date of last structured activity in the database</p></li>
 </ul>
 </li>
@@ -171,7 +156,7 @@
 </h2>
 <p><strong>Multiple possible definitions of rwPFS can be specified based on the elements mentioned above:</strong></p>
 <ul>
-<li><p><strong>different subsets of progression events in Flatiron’s <em>progression</em> table could be used</strong>, e.g. only radiographically confirmed progression events, or only progression events that occur more than 14 days after baseline (as per Flatiron recommendation)</p></li>
+<li><p><strong>different subsets of progression events could be used</strong>, e.g. only radiographically confirmed progression events, or only progression events that occur more than 14 days after baseline</p></li>
 <li>
 <p><strong>different possibilities exist to handle changes in the line of therapy (LoT):</strong> one could either</p>
 <ul>
@@ -184,8 +169,8 @@
 <p><strong>different choices are possible for the length of the time window to capture death events</strong></p>
 <ul>
 <li><p>the aim is to capture most of - and only - the death events correlated in time with the end of follow-up.</p></li>
-<li><p>this is reminiscent of informative censoring - except events after the <em>end of follow-up</em> can be assessed and potentially included.</p></li>
-<li><p>reasonable values for the length of the time window can be argued based on comparison with data collection in trials, or - in a data-driven way - by inspecting the drop in death events as the window is being extended (see best practices below). For a detailed discussion see <span class="citation">Mhatre (2021)</span></p></li>
+<li><p>this is reminiscent of informative censoring - except in this case events occurring after the <em>end of follow-up</em> can be accessed and potentially included.</p></li>
+<li><p>reasonable values for the length of the time window can be argued based on comparison with data collection in trials, or - in a data-driven way by inspecting the drop in the number of death events as the window is being extended (see best practices below). For a detailed discussion see <span class="citation">Mhatre (2021)</span></p></li>
 <li><p>ultimately, any choice will remain arbitrary to some extent.</p></li>
 </ul>
 </li>
@@ -213,9 +198,9 @@
 </div>
 </div>
 <div class="section level1">
-<h1 id="the-basics-adding-rwpfs">The basics: adding rwPFS<a class="anchor" aria-label="anchor" href="#the-basics-adding-rwpfs"></a>
+<h1 id="getting-started-with-rwpfs">Getting started with RwPFS<a class="anchor" aria-label="anchor" href="#getting-started-with-rwpfs"></a>
 </h1>
-<p>To start, we will add a rwPFS variable to our FlatironKitchen dataset. For simplicity, we will use the rwPFS definition used in <span class="citation">Mhatre (2021)</span> and <span class="citation">Ton (2021)</span>:</p>
+<p>To start, we will add a rwPFS variable to a simulated dataset. For simplicity, we will use the rwPFS definition used in <span class="citation">Mhatre (2021)</span> and <span class="citation">Ton (2021)</span>:</p>
 <ul>
 <li><p><strong>Use all progression events except where “pseudoprogression mentioned”</strong> (not only events based on radiographic evidence, and we don’t discard progression events occurring within 2 weeks after baseline)</p></li>
 <li><p><strong>Follow patients for progression into subsequent lines of treatment</strong> (do not censor them at start of new line, do not impute progression at line change)</p></li>
@@ -226,1143 +211,464 @@
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
-<ol style="list-style-type: decimal">
-<li>Load the required libraries</li>
-</ol>
+<p>Load the required libraries</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://go.roche.com/FlatironKitchen" class="external-link">FlatironKitchen</a></span><span class="op">)</span></code></pre></div>
-<p>Here is the version of <code>FlatironKitchen</code> used in this vignette.</p>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">RwPFS</span><span class="op">)</span> 
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/therneau/survival" class="external-link">survival</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/survminer/index.html" class="external-link">survminer</a></span><span class="op">)</span></code></pre></div>
+<p>The <em>RwPFS</em> package contains <em>simprog</em>, a simulated dataset with progression information and other variables required to compute a rwPFS endpoint:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"FlatironKitchen"</span><span class="op">)</span>
-<span class="co">#&gt; [1] '1.0.15'</span></code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>Create a FlatironKitchen object, using the advanced Non Small-cell Lung Cancer datamart</li>
-</ol>
+<code class="sourceCode R"><span class="va">simprog</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 1,000</span>
+<span class="co">#&gt; Columns: 10</span>
+<span class="co">#&gt; $ id                                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1…</span>
+<span class="co">#&gt; $ baseline_date                         <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-01-01, 2010-01-01, 2010-01…</span>
+<span class="co">#&gt; $ last_activity_date                    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-08-29, 2011-07-14, 2012-04…</span>
+<span class="co">#&gt; $ death_date                            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-11-19, NA, 2012-05-15, 201…</span>
+<span class="co">#&gt; $ visit_gap_start_date                  <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-04-07, NA, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ last_progression_abstraction_date     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-08-29, 2010-10-05, 2010-10…</span>
+<span class="co">#&gt; $ progression_date_all_events           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-01-27, NA, 2010-08-24, 201…</span>
+<span class="co">#&gt; $ progression_date_discard_le_14d       <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-01-27, NA, 2010-08-24, 201…</span>
+<span class="co">#&gt; $ progression_date_radiographic_only    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-01-27, NA, 2010-08-24, 201…</span>
+<span class="co">#&gt; $ progression_date_no_pseudoprogression <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-01-27, NA, 2010-08-24, 201…</span></code></pre></div>
+<p>The <em>id</em>, <em>baseline_date</em>, <em>last_activity_date</em> &amp; <em>death_date</em> columns are self-explanatory. <em>visit_gap_start_date</em> indicates the date of the last visit before a longer gap in visits (e.g. 90 days) and is <em>NA</em> of no such gap occurs. The date up to which progression information is available for a particular patient is indicated in <em>last_progression_abstraction_date</em>. Lastly, there are a number of columns indicating the date of progression, with all except <em>progression_date_all_events</em> considering only a specific subset of progression events - we’ll talk about that later.</p>
+</div>
+<div class="section level2">
+<h2 id="adding-real-world-pfs">Adding real-world PFS<a class="anchor" aria-label="anchor" href="#adding-real-world-pfs"></a>
+</h2>
+<p>For a start, we’ll keep things simple and use the <em>progression_date_all_events</em> variable, discarding the other progression date columns. A call to <code>calc_rwPFS</code>, mapping column names in our particular dataset to the function arguments, will add PFS-related variables to the data:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_start.html" class="external-link">fi_start</a></span><span class="op">(</span>
-  datamart <span class="op">=</span> <span class="st">"AdvancedNSCLC"</span>,
-  title <span class="op">=</span> <span class="st">"rwPFS in aNSCLC"</span>
-<span class="op">)</span> 
-<span class="co">#&gt; Connecting to MDHmeta API and saving to cache...</span>
-<span class="co">#&gt; MDHMeta connections saved in the session cache.</span>
-<span class="co">#&gt; Reading connections from the package config file...</span>
-<span class="co">#&gt; Trying to access in-memory cache of MDH connections...</span>
-<span class="co">#&gt; Reading connections from the package config file...</span></code></pre></div>
-<ol start="3" style="list-style-type: decimal">
-<li>Add information on the 1st line of therapy (note we’re also getting info on the 2nd line for later..)</li>
-</ol>
+<code class="sourceCode R">
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="va">simprog</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/calc_rwPFS.html">calc_rwPFS</a></span><span class="op">(</span>
+    .start_date <span class="op">=</span> <span class="st">"baseline_date"</span>,                    <span class="co">#baseline date for measuring time-to-event</span>
+    .visit_gap_start_date <span class="op">=</span> <span class="st">"visit_gap_start_date"</span>,   <span class="co">#the start date of any gap in visits longer than 90 days  </span>
+    .last_progression_abstraction_date <span class="op">=</span> <span class="st">"last_progression_abstraction_date"</span>, 
+    .progression_date <span class="op">=</span> <span class="st">"progression_date_all_events"</span>,<span class="co">#the date of progression (none: NA)</span>
+    .last_activity_date <span class="op">=</span> <span class="st">"last_activity_date"</span>,       <span class="co">#the date of last activity in the database</span>
+    .death_date <span class="op">=</span> <span class="st">"death_date"</span>,                       <span class="co">#the date of death</span>
+    .death_window_days <span class="op">=</span> <span class="fl">30</span>,                          <span class="co">#include death events &lt;30d after progression EOF</span>
+    .max_follow_up_days <span class="op">=</span> <span class="cn">Inf</span>,                        <span class="co">#censor patients after a maximum time. </span>
+    .label <span class="op">=</span> <span class="st">"_all_events"</span>                            <span class="co">#Label for this rwPFS endpoint - useful for comparisons</span>
+  <span class="op">)</span></code></pre></div>
+<p>This added the following additional columns to the dataset:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_lineoftherapy_flatiron.html" class="external-link">fi_add_lineoftherapy_flatiron</a></span><span class="op">(</span>
-    lines <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span>,
-    index_date <span class="op">=</span> <span class="st">"advanceddiagnosisdate"</span>,
-    left <span class="op">=</span> <span class="fl">0</span>,
-    right <span class="op">=</span> <span class="fl">90</span>,
-    calc_duration <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span> </code></pre></div>
-<ol start="4" style="list-style-type: decimal">
-<li>We will look at the rwPFS in patients that receive Carboplatin &amp; Paclitaxel in first line</li>
-</ol>
+<code class="sourceCode R"><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"rwPFS"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Rows: 1,000</span>
+<span class="co">#&gt; Columns: 6</span>
+<span class="co">#&gt; $ rwPFS_all_events_eof_date   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-04-07, 2010-10-05, 2010-10-16, 2010-…</span>
+<span class="co">#&gt; $ rwPFS_all_events_event_type <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Progression", "Censored", "Progression", …</span>
+<span class="co">#&gt; $ rwPFS_all_events_date       <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-01-27, 2010-10-05, 2010-08-24, 2010-…</span>
+<span class="co">#&gt; $ rwPFS_all_events_days       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 26, 277, 235, 30, 31, 69, 96, 105, 30, 122…</span>
+<span class="co">#&gt; $ rwPFS_all_events_event      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, …</span>
+<span class="co">#&gt; $ rwPFS_all_events_months     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8542094, 9.1006160, 7.7207392, 0.9856263…</span></code></pre></div>
+<p>The names of these columns are composed of “rwPFS” followed by the <em>label</em> specified in the call to <code>calc_rwPFS</code>, followed by the type of variable: <em>eof_date</em> marking the end of the period of continuous progression follow-up, the <em>type</em> &amp; <em>date</em> of the rwPFS event, as well as the <em>event</em> (or censoring) &amp; time to event variables (in <em>days</em> or <em>months</em>).</p>
+<p>Let’s plot the Kaplan-Meier curve for rwPFS</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_cohort_include.html" class="external-link">fi_cohort_include</a></span><span class="op">(</span>
-    <span class="va">lot1linename</span> <span class="op">==</span> <span class="st">"Carboplatin,Paclitaxel"</span>, 
-    description <span class="op">=</span> <span class="st">"Carboplatin &amp; Paclitaxel in 1st line"</span>, 
-    keep_na <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span> </code></pre></div>
-<p>Let’s a have a quick look at the cohort we’ve just selected:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">fk</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #0000BB;">Project</span> </span>
-<span class="co">#&gt; $title          :  rwPFS in aNSCLC </span>
-<span class="co">#&gt; $datamart       :  <span style="color: #BBBB00;">AdvancedNSCLC</span> </span>
-<span class="co">#&gt; $version        :  1.0.15 'Tiramisu'</span>
-<span class="co">#&gt; $year_month     :  2022_02 'Feb 2022'</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; <span style="color: #0000BB;">Patients</span> </span>
-<span class="co">#&gt; $n              :  <span style="color: #00BB00;">8,489</span> Patients </span>
-<span class="co">#&gt; $col_names      :  40 [<span style="color: #555555;">...</span>, lot2baseecogdate, lot2baseecogvalue]</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">Attrition</span><span style="font-weight: bold;"> </span></span>
-<span class="co"><span style="font-weight: bold;">#&gt; </span>AdvancedNSCLC                       :  75,559 ----------------------------------------</span>
-<span class="co">#&gt; Carboplatin &amp; Paclitaxel in 1st lin :   <span style="color: #00BB00;">8,489</span> ----</span>
-<span class="co">#&gt; </span>
-<span class="co"><span style="color: #BB0000; font-weight: bold;">#&gt; Warnings</span><span style="font-weight: bold;"> </span></span>
-<span class="co"><span style="font-weight: bold;">#&gt; </span>-  593 (0.8%) patients appear in at least one other enhanced cohort. </span>
-<span class="co">#&gt; -  453 patient(s) are associated with different practice types. For th... </span>
-<span class="co">#&gt; -  22 (0%) patient(s) had DateOfDeath values unlike YYYY-MM and will b... </span>
-<span class="co">#&gt; -  14 patients have same base ecogvalue and base ecogdate for differen...</span></code></pre></div>
-<p>These are the variables we currently have in our data:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span><span class="op">$</span><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="va">names</span>
-<span class="co">#&gt;  [1] "patientid"             "diagnosisdate"         "advanceddiagnosisdate"</span>
-<span class="co">#&gt;  [4] "histology"             "groupstage"            "smokingstatus"        </span>
-<span class="co">#&gt;  [7] "multiple"              "birthyear"             "gender"               </span>
-<span class="co">#&gt; [10] "race"                  "ethnicity"             "state"                </span>
-<span class="co">#&gt; [13] "practiceid"            "practicetype"          "primaryphysicianid"   </span>
-<span class="co">#&gt; [16] "multiple_practicetype" "region"                "raceethnicity"        </span>
-<span class="co">#&gt; [19] "dateofdeath"           "valid_dateofdeath"     "death"                </span>
-<span class="co">#&gt; [22] "lastvisitdate"         "lastadmindate"         "lastlabdate"          </span>
-<span class="co">#&gt; [25] "lastvitalsdate"        "enddate"               "lastactivitydate"     </span>
-<span class="co">#&gt; [28] "lastcontactdate"       "lot1linename"          "lot1linecategory"     </span>
-<span class="co">#&gt; [31] "lot1startdate"         "lot1enddate"           "lot2linename"         </span>
-<span class="co">#&gt; [34] "lot2linecategory"      "lot2startdate"         "lot2enddate"          </span>
-<span class="co">#&gt; [37] "lot1baseecogdate"      "lot1baseecogvalue"     "lot2baseecogdate"     </span>
-<span class="co">#&gt; [40] "lot2baseecogvalue"</span></code></pre></div>
-<p>Note that several variables required for the calculation of rwPFS are already present.</p>
-<p>These are “lot1startdate” (our baseline), lastactivitydate and dateofdeath.</p>
-<p>What’s still missing for the calculation of rwPFS (besides progression), is information on any long gaps between visits, so let’s do this</p>
-<ol start="5" style="list-style-type: decimal">
-<li>Add information on visit gaps larger than 90 days from start of 1st line onwards</li>
-</ol>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_visitgap.html" class="external-link">fi_calc_visitgap</a></span><span class="op">(</span>
-    index_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,
-    gapdays <span class="op">=</span> <span class="fl">90</span>,
-    what <span class="op">=</span> <span class="st">"After"</span>,
-    force_database <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span></code></pre></div>
-<p>This is required to ensure gapless progression follow-up. The function added a few columns related to the visit gap, of which we only need the date of the “lastvisitbeforegap.”</p>
-</div>
-<div class="section level2">
-<h2 id="add-information-on-progression">Add information on progression<a class="anchor" aria-label="anchor" href="#add-information-on-progression"></a>
-</h2>
-<ol start="6" style="list-style-type: decimal">
-<li>add the date of the first progression event and end date of progression abstraction (“lastclinicnotedate”)</li>
-</ol>
-<p>Selecting the subset of progression events to use is the first step of specifying a rwPFS definition. Here we stick to the definition outlined above, using all progression events, radiographic or not, and we don’t discard any events occuring right after baseline. We do exclude events that are flagged “ispseudoprogressionmentioned,” though. Incidentally, there won’t be any pseudoprogression events in chemotherapies such as the Carboplatin &amp; Paclitaxel combination (you could check the number of events to verify). Here we’re simply sticking to the definition proposed by <span class="citation">Mhatre (2021)</span> for use across both CIT and chemotherapies in aNSCLC, based on the OAK trial (see <span class="citation">Mhatre (2021)</span> for details).</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_progression.html" class="external-link">fi_add_progression</a></span><span class="op">(</span>
-      start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,          <span class="co">#we're measuring rwPFS from the start of treatment</span>
-      require_radiographic <span class="op">=</span> <span class="cn">FALSE</span>,          <span class="co">#we don't require progression to be radiographically confirmed (in NSCLC, most are anyway)</span>
-      exclude_pseudoprogression <span class="op">=</span> <span class="cn">TRUE</span>,      <span class="co">#we exclude pseudoprogression events (there won't be any in our chemo treatment)</span>
-      discard_n_days <span class="op">=</span> <span class="fl">0</span>,                    <span class="co">#we do not discard any progression events right after baseline              </span>
-      label <span class="op">=</span> <span class="st">"_nopseudo"</span>,                   <span class="co">#this (optional) label will help us keep different rwPFS endpoints apart later</span>
-      prog_filter_expression <span class="op">=</span> <span class="cn">NULL</span>          <span class="co">#this is an advanced feature allowing more flexible event selection, explained later. Defaults to NULL.</span>
-  <span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_progression()</span> ────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: FALSE. Exclude_pseudoprogression: TRUE. Label: "_nopseudo". Expression for additional filtering of progression events: none.</span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_ADVNSCLCPROGRESSION</span></span>
-<span class="co">#&gt; Joining, by = "patientid"</span>
-<span class="co">#&gt; Warning : <span style="color: #BB0000;">305 patient(s) had no progression information abstracted beyond startdate (lastclinicnotedate set to missing)</span></span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">progressiondate_nopseudo, lastclinicnotedate_nopseudo</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 16.6s [95.6 s]</span></span></code></pre></div>
-<p>Two new columns were added: <em>progressiondate_nopseudo</em> and <em>lastclinicnotedate_nopseudo</em></p>
-<p>Note that FlatironKitchen warned us that 287 out of our 7,823 patients had no progression abstracted beyond the baseline date. This can happen if patients had no progression information abstracted at all, or their lastclinicnotedate is before our startdate. At this point we could exclude those patients since it won’t be possible to calculate rwPFS for them. However, let’s leave them for now, in order to demonstrate how the downstream functions deal with such cases.</p>
-</div>
-<div class="section level2">
-<h2 id="habemus-real-world-pfs">Habemus real-world PFS!<a class="anchor" aria-label="anchor" href="#habemus-real-world-pfs"></a>
-</h2>
-<p>Not yet - but soon. Now that all required columns are present in our dataset, we can..</p>
-<ol start="7" style="list-style-type: decimal">
-<li>Compute the rwPFS endpoint</li>
-</ol>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          <span class="co">#we're measuring rwPFS from the start of treatment</span>
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           <span class="co">#the start date of any gap in visits longer than 90 days</span>
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>, <span class="co">#the lastclinicnotedate we just added..</span>
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         <span class="co">#..and the progression date with the same label</span>
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               <span class="co">#the date of last activity in the database</span>
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                <span class="co">#include death events up to 30d after end of progression follow-up</span>
-    max_follow_up_days <span class="op">=</span> <span class="cn">Inf</span>,                              <span class="co">#censor patients after a maximum time (e.g. to harmonize with the trial). Defaults to Inf.</span>
-    label <span class="op">=</span> <span class="st">"_no_pseudoprogression"</span>                        <span class="co">#let this be our primary rwPFS definition, the reference to compare others against</span>
-  <span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _no_pseudoprogression.</span>
-<span class="co">#&gt; Warning : <span style="color: #BB0000;">The rwPFS variables for  388 patient(s) were set to missing. This could be due to one of the following reasons: missing lastclinicnotedate, missing date of last activity,  lastclinicnotedate equal to the startdate, or a date of death being earlier than the start date (this can happen because death dates are rounded to mid-month in Flatiron).  These could be either removed from the data, or manually censored at baseline (to preserve the distribution of baseline covariates)</span></span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_no_pseudoprogression_eof_date, rwpfs_no_pseudoprogression_event_type, rwpfs_no_pseudoprogression_date, rwpfs_no_pseudoprogression_days, rwpfs_no_pseudoprogression_event, rwpfs_no_pseudoprogression_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [95.7 s]</span></span></code></pre></div>
-<p>Note the warning about some patients having been set to missing. Let’s have a closer look at those.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span><span class="op">$</span><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rwpfs_no_pseudoprogression_event_type</span> <span class="op">==</span> <span class="st">"Missing"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">count</a></span><span class="op">(</span>
-    `missing lastclinicnotedate` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">lastclinicnotedate_nopseudo</span><span class="op">)</span>, 
-    `lastclinicnotedate on start date?` <span class="op">=</span> <span class="va">lot1startdate</span> <span class="op">==</span> <span class="va">lastclinicnotedate_nopseudo</span>,
-    `missing last activity date?` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">lastactivitydate</span><span class="op">)</span>,
-    `death before start date` <span class="op">=</span> <span class="va">dateofdeath</span> <span class="op">&lt;=</span> <span class="va">lot1startdate</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="23%">
-<col width="29%">
-<col width="23%">
-<col width="20%">
-<col width="3%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">missing lastclinicnotedate</th>
-<th align="left">lastclinicnotedate on start date?</th>
-<th align="left">missing last activity date?</th>
-<th align="left">death before start date</th>
-<th align="right">n</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="right">56</td>
-</tr>
-<tr class="even">
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="right">17</td>
-</tr>
-<tr class="odd">
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="left">NA</td>
-<td align="right">10</td>
-</tr>
-<tr class="even">
-<td align="left">TRUE</td>
-<td align="left">NA</td>
-<td align="left">FALSE</td>
-<td align="left">FALSE</td>
-<td align="right">215</td>
-</tr>
-<tr class="odd">
-<td align="left">TRUE</td>
-<td align="left">NA</td>
-<td align="left">FALSE</td>
-<td align="left">TRUE</td>
-<td align="right">26</td>
-</tr>
-<tr class="even">
-<td align="left">TRUE</td>
-<td align="left">NA</td>
-<td align="left">FALSE</td>
-<td align="left">NA</td>
-<td align="right">64</td>
-</tr>
-</tbody>
-</table>
-<p>It looks like a total of 278 patients had a missing lastclinicnote date (this may have been so from the start, or fi_add_progression may have set this to missing in case it was before the start date). The fi_add_progression function had already alerted us about this. An additional 17 patients seem to have their death dates before start date, which is likely due to the monthly granularity of death dates in Flatiron (for de-identification purposes). Let us remove patients with missing rwPFS.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_cohort_exclude.html" class="external-link">fi_cohort_exclude</a></span><span class="op">(</span><span class="va">rwPFS_no_pseudoprogression_event_type</span> <span class="op">==</span> <span class="st">"Missing"</span>,
-                    description <span class="op">=</span> <span class="st">"Exclude missing rwPFS"</span>,
-                    keep_na <span class="op">=</span> <span class="cn">FALSE</span>
-  <span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_cohort_exclude()</span> ─────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Description = Exclude missing rwPFS</span>
-<span class="co">#&gt; Note    : Code = rwPFS_no_pseudoprogression_event_type == "Missing"</span>
-<span class="co">#&gt; Excluded: <span style="color: #BB0000;">388</span> patients</span>
-<span class="co">#&gt; Cohort  : <span style="color: #00BB00;">8,101</span> patients</span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [95.7 s]</span></span></code></pre></div>
-<p>Finally, let’s plot the Kaplan-Meier curve for rwPFS, stratified by histology.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_stat_survfit.html" class="external-link">fi_stat_survfit</a></span><span class="op">(</span>
-    followup_duration <span class="op">=</span> <span class="st">"rwpfs_no_pseudoprogression_months"</span>,
-    status <span class="op">=</span> <span class="st">"rwpfs_no_pseudoprogression_event"</span>,
-    strata <span class="op">=</span> <span class="st">"histology"</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_plot_km.html" class="external-link">fi_plot_km</a></span><span class="op">(</span>
-    xlab <span class="op">=</span> <span class="st">"Months"</span>
-  <span class="op">)</span></code></pre></div>
-<p><img src="real_world_PFS_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;"></p>
-<p>This doesn’t look too bad - except that the different histologies have very different follow-up times, it seems. Let’s re-generate those rwPFS variables, but this time right-censor patients with respect to rwPFS at around 40 months - let’s say 1200 days.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_select.html" class="external-link">fi_select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"rwpfs"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>                        <span class="co">#FK doesn't let us overwrite columns, lots remove the old ones first.. </span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>, 
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,        
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_no_pseudoprogression"</span>                                  
-  <span class="op">)</span> 
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [95.7 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _no_pseudoprogression.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_no_pseudoprogression_eof_date, rwpfs_no_pseudoprogression_event_type, rwpfs_no_pseudoprogression_date, rwpfs_no_pseudoprogression_days, rwpfs_no_pseudoprogression_event, rwpfs_no_pseudoprogression_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [95.8 s]</span></span></code></pre></div>
-<p>..and plot it again</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_stat_survfit.html" class="external-link">fi_stat_survfit</a></span><span class="op">(</span>
-    followup_duration <span class="op">=</span> <span class="st">"rwpfs_no_pseudoprogression_months"</span>,
-    status <span class="op">=</span> <span class="st">"rwpfs_no_pseudoprogression_event"</span>,
-    strata <span class="op">=</span> <span class="st">"histology"</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_plot_km.html" class="external-link">fi_plot_km</a></span><span class="op">(</span>
-    xlab <span class="op">=</span> <span class="st">"Months"</span>
-  <span class="op">)</span></code></pre></div>
-<p><img src="real_world_PFS_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;"></p>
-<p>This looks much cleaner. Congratulations, you’ve mastered the basics of using rwPFS!</p>
+<span class="fu"><a href="https://rdrr.io/pkg/survminer/man/surv_fit.html" class="external-link">surv_fit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">rwPFS_all_events_months</span>, <span class="va">rwPFS_all_events_event</span><span class="op">)</span> <span class="op">~</span> <span class="fl">1</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://rdrr.io/pkg/survminer/man/ggsurvplot.html" class="external-link">ggsurvplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span><span class="op">)</span> </code></pre></div>
+<p><img src="real_world_PFS_files/figure-html/unnamed-chunk-6-1.png" width="1600" style="display: block; margin: auto;"></p>
+<p>This doesn’t look too bad… congratulations, you’ve mastered the basics of using the RwPFS package!</p>
 <p><br><br></p>
+<!-- # Advanced: comparison of multiple rwPFS definitions -->
+<!-- As mentioned before, there is more than one way of defining rwPFS. Often, the differences between definitions will be small - but nevertheless, we need to show this, we can't just assume they are, and we must be able to answer questions in that direction.. However, conducting a full sensitivity analysis for each and every rwPFS definition seems overkill.. so what do we do? -->
+<!-- <br/> -->
+<!-- Ideally, we'd have a concise summary table, where readers could verify at one glance what the impact of varying the endpoint definition would be. -->
+<!-- This is what we'll try to do.. -->
+<!-- <br/> -->
+<!-- First, let's calculate rwPFS across a range of "reasonable" definitions, starting with the progression part & varying one aspect at a time, always comparing against our reference progression variable defined previously.  -->
+<!-- <br/> -->
+<!-- ```{r} -->
+<!-- fk <- fk %>% -->
+<!--   #do not remove pseudoprogression events -->
+<!--   fi_add_progression( -->
+<!--     start_date = "lot1startdate",           -->
+<!--     require_radiographic = FALSE,          #we don't require progression to be radiographically confirmed (in NSCLC, most are anyway) -->
+<!--     exclude_pseudoprogression = FALSE,     #we don't exclude pseudoprogression events (there won't be any in our chemo treatment) -->
+<!--     discard_n_days = 0,                    #we do not discard any progression events right after baseline               -->
+<!--     label = "_allevents",                   -->
+<!--     prog_filter_expression = NULL           -->
+<!--   ) %>% -->
+<!--   #omit progression events occurring within 14d of baseline (Flatiron guidance) -->
+<!--   fi_add_progression( -->
+<!--     start_date = "lot1startdate",           -->
+<!--     require_radiographic = FALSE,          #we don't require progression to be radiographically confirmed (in NSCLC, most are anyway) -->
+<!--     exclude_pseudoprogression = TRUE,      #we exclude pseudoprogression events (there won't be any in our chemo treatment) -->
+<!--     discard_n_days = 14,                   #we discard any progression events within 14d after baseline               -->
+<!--     label = "_omit_le_14d",                 -->
+<!--     prog_filter_expression = NULL          -->
+<!--   ) %>% -->
+<!--   #only use radiographically confirmed progression events -->
+<!--   fi_add_progression( -->
+<!--     start_date = "lot1startdate",           -->
+<!--     require_radiographic = TRUE,           #we require progression to be radiographically confirmed (in NSCLC, most are anyway) -->
+<!--     exclude_pseudoprogression = TRUE,      #we exclude pseudoprogression events (there won't be any in our chemo treatment) -->
+<!--     discard_n_days = 0,                    #we don't discard progression events shortly after baseline               -->
+<!--     label = "_only_radiographic",           -->
+<!--     prog_filter_expression = NULL    -->
+<!--   )  -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- We also want to look at rwPFS definitions where -->
+<!-- - a progression event is imputed at the start of the next LoT  -->
+<!-- - patients are censored at start of the next Lot -->
+<!-- - we don't consider visit gaps -->
+<!-- <br/> -->
+<!-- We already have the start date of the 2nd LoT from before. What we need is the date of those imputed progression events, and a columns that replaces the lastclinicnotedate with the start date of LoT 2 if it's before lastclinicnotedate..  -->
+<!-- <br/> -->
+<!-- ```{r} -->
+<!-- fk <- fk %>% -->
+<!--   fi_mutate( -->
+<!--     #impute progression at start of 2nd line -->
+<!--     imputed_progression_date = pmin(progressiondate_nopseudo, lot2startdate, na.rm = T), -->
+<!--     #censor at the earliest of lastclinicnotedate or start of 2nd line -->
+<!--     imputed_censoring_date = pmin(lastclinicnotedate_nopseudo, lot2startdate, na.rm = T), -->
+<!--     #adding an all_na column because fi_calc_rwPFS expects the start date of any long visit gaps - we'll tell it there are none.. -->
+<!--     all_na = NA_character_ %>% as.Date() -->
+<!--   ) -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- Now, we can calculate the different rwPFS endpoints corresponding to the above handling of progression events and LoT: -->
+<!-- <br/> -->
+<!-- ```{r} -->
+<!-- fk <- fk %>%  -->
+<!--    #all events -->
+<!--    fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                            -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",             -->
+<!--     last_clinic_note_date = "lastclinicnotedate_allevents", -->
+<!--     progression_date = "progressiondate_allevents",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 30,                                  -->
+<!--     max_follow_up_days = 1200,                               -->
+<!--     label = "_all_events"                                    -->
+<!--   )  %>% -->
+<!--   #omit events within 14d of baseline -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",           -->
+<!--     last_clinic_note_date = "lastclinicnotedate_omit_le_14d",  -->
+<!--     progression_date = "progressiondate_omit_le_14d",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 30,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_omit_le_14d"                                 -->
+<!--   ) %>% -->
+<!--   #only use radiographically confirmed progression events -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_only_radiographic",  -->
+<!--     progression_date = "progressiondate_only_radiographic",  -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 30,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_only_radiographic"                            -->
+<!--   )   %>% -->
+<!--   #impute progression at start of 2nd line -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo",  -->
+<!--     progression_date = "imputed_progression_date",         -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 30,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_impute_progression"                           -->
+<!--   ) %>% -->
+<!--   #censor at the earliest of lastclinicnotedate or start of 2nd line -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "imputed_censoring_date",       -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 30,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_censor_at_lot_change"                         -->
+<!--   ) %>% -->
+<!--   #Ignore visit gaps -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "all_na",                        -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo",  -->
+<!--     progression_date = "progressiondate_nopseudo",         -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 30,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_ignore_visit_gaps"                            -->
+<!--   )  -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- Now that we have all these different rwPFS endpoints, let's compare them using `fi_compare_rwPFS`:  -->
+<!-- <br/> -->
+<!-- ```{r} -->
+<!-- fk %>%  -->
+<!--   fi_compare_rwPFS( -->
+<!--     labels = c(                         #Specify the rwPFS labels to be tabulated (in the desired order) -->
+<!--       "_no_pseudoprogression", -->
+<!--       "_all_events", -->
+<!--       "_omit_le_14d", -->
+<!--       "_only_radiographic", -->
+<!--       "_impute_progression", -->
+<!--       "_censor_at_lot_change", -->
+<!--       "_ignore_visit_gaps" -->
+<!--     ), -->
+<!--     reference = "_no_pseudoprogression", -->
+<!--     incremental_deaths_column = FALSE  -->
+<!--   ) %>% -->
+<!--   kable() -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- The obtained table gives an overview across the rwPFS definitions we're considering. It compares the no. of patients censored, with progression, or dying, as well as the percentage of rwPFS events (death and progression combined) that are death.  -->
+<!-- Kaplan-Meier median and hazard ratio relative to the reference definition give an impression of how big the impact on corresponding analysis outcomes would be. Note that to obtain the hazard ratio, a cox regression was fitted to data of twice the same patients but with different endpoints. Since the Cox model assumes the data from two compared groups to be independent, this is a bit of a stretch. The HR should therefore cautiously be interpreted as a crude indication of expected impact on any HR analyses, in order to avoid doing full senstivity analyses with all rwPFS definitions. -->
+<!-- Glancing at HR's across all definitions, we find that in most cases, hazard ratios should be little affected by the exact rwPFS definition, with two exceptions: imputing progression increases the event rate considerably, and not ensuring continuous progression follow-up slightly reduces the event rate, presumably due to progression events going missing.  -->
+<!-- With 'imputing progression' having the strongest impact, arguing for this definition would require strong evidence that there is a substantial amount of missing information in the progression data, and that line-change would be a reliable indicator of progression. We consider this not to be the case and conclude that imputing progression at line change is not to be recommended.  -->
+<!-- Not ensuring continuous follow-up by not censoring patients at the start of any visit gap of 90d or longer decreases the event rate, which suggests that indeed the progression information in patients with long gaps is incomplete. Consequently, we consider it reasonable to censor patients at the start of any long gaps, as is done in the reference definition. -->
+<!-- Apart from 'Ignore visit gaps' and 'Impute progression', all tested definitions appear sensible and differ very little in terms of hazard ratios or median rwPFS. -->
+<!-- <br/> -->
+<!-- A remaining question is how long the time window for capturing deaths should be, after the end of progression follow-up. We've chosen 30 days above,  -->
+<!-- but mostly because that's what @rwPFS_OAK and @EC_impowers did.  -->
+<!-- <br/> -->
+<!-- There may not be one single "right" value for the size of this window. However, one way of verifying if a given value is sensible is to vary the length -->
+<!-- of this window and check how many additional deaths are captured when extending it. The idea here is that we want to capture most of the deaths that are -->
+<!-- correlated with the end of progression follow-up, meaning they happen shortly after. In addition, we want to keep the window as small as possible to -->
+<!-- avoid missing any progression events. A pragmatic choice may be made that reconciles these opposing objectives as well as possible. -->
+<!-- <br/>   -->
+<!-- We can calculate rwPFS endpoints with varying window lengths as follows: -->
+<!-- <br/>   -->
+<!-- ```{r} -->
+<!-- fk <- fk %>% -->
+<!--   #removing all previous rwPFS columns -->
+<!--   fi_select(-contains("rwpfs")) %>%      -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 0,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_0d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 10,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_10d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 20,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_20d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 30,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_30d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 40,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_40d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 50,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_50d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 60,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_60d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 70,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_70d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 80,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_80d_window"                                    -->
+<!--   ) %>% -->
+<!--   fi_calc_rwPFS( -->
+<!--     start_date = "lot1startdate",                           -->
+<!--     visit_gap_start_date = "lastvisitbeforegap",            -->
+<!--     last_clinic_note_date = "lastclinicnotedate_nopseudo", -->
+<!--     progression_date = "progressiondate_nopseudo",          -->
+<!--     last_activity_date = "lastactivitydate",                -->
+<!--     death_date = "dateofdeath", -->
+<!--     death_window_days = 90,                                 -->
+<!--     max_follow_up_days = 1200,                              -->
+<!--     label = "_90d_window"                                    -->
+<!--   )  -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- and then compare them like before, but this time adding an 'incremental deaths' column to the output, indicating how many additional deaths are captured by extending the window by 10 more days -->
+<!-- <br/>  -->
+<!-- ```{r} -->
+<!-- fk %>%  -->
+<!--   fi_compare_rwPFS( -->
+<!--     labels = paste0("_", 0:9*10, "d_window"),                         #Specify the rwPFS labels to be tabulated (in the desired order) -->
+<!--     reference = "_30d_window", -->
+<!--     incremental_deaths_column = TRUE  -->
+<!--   ) %>% -->
+<!--   kable() -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- Similarly as before, we are now able to compare different rwPFS definitions at a glance and examine the impact of extending the time window for capturing death events. -->
+<!-- <br/> -->
+<!-- First, a time-window of 0 days corresponds to a reasonably substantial HR difference of 0.2 compared to the reference (30d window). This indicates that indeed it is important to capture death events occuring after end of progression follow-up. We can also see, that the effect of extending the window from 30d to 90d changes the HR by 0.11, suggesting that the effect of extending the window further is diminishing rapidly. This is reflected in the 'Incremental deaths' column as well: for the each 10-day period up to 30 days we capture approximately 300 more deaths, with this number dropping rapidly thereafter. It is hard to tell where exactly the cutoff should be made - but it looks like 30d to 60d is reasonable since most censoring-related deaths appear to be captured, and further extension has negligible impact on hazard ratios.  -->
+<!-- <br/>   -->
+<!-- # rwPFS in cancers other than aNSCLC, and custom filtering of progression events -->
+<!-- <br/> -->
+<!-- The above examples all used the aNSCLC datamart - how can rwPFS be calculated for other datamarts? -->
+<!-- <br/>   -->
+<!-- There are three points to consider: -->
+<!-- - `fi_calc_rwPFS` and `fi_compare_rwPFS` can be used in exactly the same way as illustrated above.  -->
+<!-- - Which rwPFS definitions are most appropriate must be determined individually for other patient populations.  -->
+<!-- - `fi_add_progression` makes assumptions about the structure of the `PROGRESSION` table in the Flatiron database, which may complicate its use with certain datamarts. However, the function can be tweaked by using the `prog_filter_expression` argument. With it, a logical R expression (involving unquoted table column names) can be supplied, and only progression events are included where this expression evaluates to "TRUE". This can also be used for more fine-grained filtering of progression events in the aNSCLC datamart.  -->
+<!-- <br/>  -->
+<!-- For a start, let's look what the `PROGRESSION` table looks like in the aNSCLC datamart -->
+<!-- <br/> -->
+<!-- ```{r, out.width = "90%", fig.align = "left"} -->
+<!-- fk %>% -->
+<!--   fi_read_table( -->
+<!--     table_name = "ENHANCED_ADVNSCLCPROGRESSION" -->
+<!--   ) %>% -->
+<!--   head()  -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- Knowing the structure of the progression table, we can now select radiographically confirmed progression events that are not pseudoprogression using the `prog_filter_expression` argument - which yields the same result as what we get by using the `require_radiographic` and `exclude_pseudoprogression` arguments. -->
+<!-- <br/>  -->
+<!-- ```{r} -->
+<!-- fk <- fk %>% -->
+<!--   #remove previously generated columns -->
+<!--   fi_select(  -->
+<!--     -contains("progressiondate"),  -->
+<!--     -contains("lastclinicnotedate"),  -->
+<!--     -contains("rwpfs") -->
+<!--   ) %>% -->
+<!--   #This is how we filtered progression events before -->
+<!--   fi_add_progression( -->
+<!--       start_date = "lot1startdate",           -->
+<!--       require_radiographic = TRUE,           -->
+<!--       exclude_pseudoprogression = TRUE,       -->
+<!--       discard_n_days = 0,                    -->
+<!--       label = "_radio_nopseudo",                   -->
+<!--       prog_filter_expression = NULL           -->
+<!--   ) %>% -->
+<!--   #This is the same using prog_filter_expression instead -->
+<!--   fi_add_progression( -->
+<!--       start_date = "lot1startdate",           -->
+<!--       require_radiographic = FALSE,          #These are now not used       -->
+<!--       exclude_pseudoprogression = FALSE,     #These are now not used -->
+<!--       discard_n_days = 0,                    -->
+<!--       label = "_prog_filter_expression",                   -->
+<!--       prog_filter_expression = "isradiographicevidence == 'Yes' &  ispseudoprogressionmentioned == 'No'"      -->
+<!--   ) -->
+<!--   #This is to demonstrate that the two ways are exactly equivalent -->
+<!--   fk %>% -->
+<!--     fi_pull_data() %>% -->
+<!--     { -->
+<!--       all(.$progressiondate_radio_nopseudo == .$progressiondate_prog_filter_expression) -->
+<!--     } -->
+<!-- ``` -->
+<!-- <br/>   -->
+<!-- As we can see, the two ways of filtering progression events are equivalent.  -->
+<!-- <br/> -->
+<!-- Note: require_radiographic or exclude_pseudoprogression arguments generate filter expressions that are simply concatenated with prog_filter_expression using logical `AND`.  -->
+<!-- <br/> -->
+<!-- To do this in Metastatic breastcancer, we run -->
+<!-- <br/> -->
+<!-- ```{r} -->
+<!-- fk2 <- fi_start("MetastaticBreastCancer") -->
+<!-- fk2 %>% -->
+<!--   fi_read_table(table_name = "ENHANCED_METBREASTPROGRESSION") %>% -->
+<!--    head()  -->
+<!-- ``` -->
+<!-- <br/> -->
+<!-- This progression table has additional columns/flags while containing the `ispseudoprogressionmentioned` and `isradiographicevidence` columns we've seen in the aNSCLC progression table. All these can be used jointly to filter progression events, for example -->
+<!-- <br/> -->
+<!-- ```{r} -->
+<!-- fk2 <- fk2 %>% -->
+<!--   fi_add_progression( -->
+<!--     start_date = "metdiagnosisdate", -->
+<!--     require_radiographic = FALSE, -->
+<!--     exclude_pseudoprogression = TRUE, -->
+<!--     discard_n_days = 0, -->
+<!--     label = "", -->
+<!--     prog_filter_expression = "istumormarkersonly == 'No'" -->
+<!--   ) -->
+<!-- ``` -->
+<!-- <br/>  -->
+<!-- In this manner we can use `fi_add_progression` with any progression table that has a `progressiondate` and a `lastclinicnotedate` column. -->
+<!-- <br/> -->
+<!-- ```{r, include = FALSE} -->
+<!-- fk$database$connection$disconnect() -->
+<!-- fk2$database$connection$disconnect() -->
+<!-- ``` -->
 </div>
-</div>
-<div class="section level1">
-<h1 id="advanced-comparison-of-multiple-rwpfs-definitions">Advanced: comparison of multiple rwPFS definitions<a class="anchor" aria-label="anchor" href="#advanced-comparison-of-multiple-rwpfs-definitions"></a>
-</h1>
-<p>As mentioned before, there is more than one way of defining rwPFS. Often, the differences between definitions will be small - but nevertheless, we need to show this, we can’t just assume they are, and we must be able to answer questions in that direction.. However, conducting a full sensitivity analysis for each and every rwPFS definition seems overkill.. so what do we do?</p>
-<p><br></p>
-<p>Ideally, we’d have a concise summary table, where readers could verify at one glance what the impact of varying the endpoint definition would be. This is what we’ll try to do..</p>
-<p><br></p>
-<p>First, let’s calculate rwPFS across a range of “reasonable” definitions, starting with the progression part &amp; varying one aspect at a time, always comparing against our reference progression variable defined previously.</p>
-<p><br></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#do not remove pseudoprogression events</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_progression.html" class="external-link">fi_add_progression</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,          
-    require_radiographic <span class="op">=</span> <span class="cn">FALSE</span>,          <span class="co">#we don't require progression to be radiographically confirmed (in NSCLC, most are anyway)</span>
-    exclude_pseudoprogression <span class="op">=</span> <span class="cn">FALSE</span>,     <span class="co">#we don't exclude pseudoprogression events (there won't be any in our chemo treatment)</span>
-    discard_n_days <span class="op">=</span> <span class="fl">0</span>,                    <span class="co">#we do not discard any progression events right after baseline              </span>
-    label <span class="op">=</span> <span class="st">"_allevents"</span>,                  
-    prog_filter_expression <span class="op">=</span> <span class="cn">NULL</span>          
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#omit progression events occurring within 14d of baseline (Flatiron guidance)</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_progression.html" class="external-link">fi_add_progression</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,          
-    require_radiographic <span class="op">=</span> <span class="cn">FALSE</span>,          <span class="co">#we don't require progression to be radiographically confirmed (in NSCLC, most are anyway)</span>
-    exclude_pseudoprogression <span class="op">=</span> <span class="cn">TRUE</span>,      <span class="co">#we exclude pseudoprogression events (there won't be any in our chemo treatment)</span>
-    discard_n_days <span class="op">=</span> <span class="fl">14</span>,                   <span class="co">#we discard any progression events within 14d after baseline              </span>
-    label <span class="op">=</span> <span class="st">"_omit_le_14d"</span>,                
-    prog_filter_expression <span class="op">=</span> <span class="cn">NULL</span>         
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#only use radiographically confirmed progression events</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_progression.html" class="external-link">fi_add_progression</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,          
-    require_radiographic <span class="op">=</span> <span class="cn">TRUE</span>,           <span class="co">#we require progression to be radiographically confirmed (in NSCLC, most are anyway)</span>
-    exclude_pseudoprogression <span class="op">=</span> <span class="cn">TRUE</span>,      <span class="co">#we exclude pseudoprogression events (there won't be any in our chemo treatment)</span>
-    discard_n_days <span class="op">=</span> <span class="fl">0</span>,                    <span class="co">#we don't discard progression events shortly after baseline              </span>
-    label <span class="op">=</span> <span class="st">"_only_radiographic"</span>,          
-    prog_filter_expression <span class="op">=</span> <span class="cn">NULL</span>   
-  <span class="op">)</span> 
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_progression()</span> ────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: FALSE. Exclude_pseudoprogression: FALSE. Label: "_allevents". Expression for additional filtering of progression events: none.</span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_ADVNSCLCPROGRESSION</span></span>
-<span class="co">#&gt; Joining, by = "patientid"</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">progressiondate_allevents, lastclinicnotedate_allevents</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 11.8s [107.6 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_progression()</span> ────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 14 days. Require_radiographic: FALSE. Exclude_pseudoprogression: TRUE. Label: "_omit_le_14d". Expression for additional filtering of progression events: none.</span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_ADVNSCLCPROGRESSION</span></span>
-<span class="co">#&gt; Joining, by = "patientid"</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">progressiondate_omit_le_14d, lastclinicnotedate_omit_le_14d</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 11.5s [119.1 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_progression()</span> ────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: TRUE. Exclude_pseudoprogression: TRUE. Label: "_only_radiographic". Expression for additional filtering of progression events: none.</span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_ADVNSCLCPROGRESSION</span></span>
-<span class="co">#&gt; Joining, by = "patientid"</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">progressiondate_only_radiographic, lastclinicnotedate_only_radiographic</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 11.8s [130.9 s]</span></span></code></pre></div>
-<p><br></p>
-<p>We also want to look at rwPFS definitions where</p>
-<ul>
-<li><p>a progression event is imputed at the start of the next LoT</p></li>
-<li><p>patients are censored at start of the next Lot</p></li>
-<li><p>we don’t consider visit gaps</p></li>
-</ul>
-<p><br></p>
-<p>We already have the start date of the 2nd LoT from before. What we need is the date of those imputed progression events, and a columns that replaces the lastclinicnotedate with the start date of LoT 2 if it’s before lastclinicnotedate..</p>
-<p><br></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_mutate.html" class="external-link">fi_mutate</a></span><span class="op">(</span>
-    <span class="co">#impute progression at start of 2nd line</span>
-    imputed_progression_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">progressiondate_nopseudo</span>, <span class="va">lot2startdate</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
-    <span class="co">#censor at the earliest of lastclinicnotedate or start of 2nd line</span>
-    imputed_censoring_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">lastclinicnotedate_nopseudo</span>, <span class="va">lot2startdate</span>, na.rm <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>,
-    <span class="co">#adding an all_na column because fi_calc_rwPFS expects the start date of any long visit gaps - we'll tell it there are none..</span>
-    all_na <span class="op">=</span> <span class="cn">NA_character_</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="op">)</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">imputed_progression_date, imputed_censoring_date, all_na</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [130.9 s]</span></span></code></pre></div>
-<p><br></p>
-<p>Now, we can calculate the different rwPFS endpoints corresponding to the above handling of progression events and LoT:</p>
-<p><br></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  
-   <span class="co">#all events</span>
-   <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                           
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,            
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_allevents"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_allevents"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                 
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                              
-    label <span class="op">=</span> <span class="st">"_all_events"</span>                                   
-  <span class="op">)</span>  <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#omit events within 14d of baseline</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,          
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_omit_le_14d"</span>, 
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_omit_le_14d"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_omit_le_14d"</span>                                
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#only use radiographically confirmed progression events</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_only_radiographic"</span>, 
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_only_radiographic"</span>, 
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_only_radiographic"</span>                           
-  <span class="op">)</span>   <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#impute progression at start of 2nd line</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>, 
-    progression_date <span class="op">=</span> <span class="st">"imputed_progression_date"</span>,        
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_impute_progression"</span>                          
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#censor at the earliest of lastclinicnotedate or start of 2nd line</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"imputed_censoring_date"</span>,      
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_censor_at_lot_change"</span>                        
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#Ignore visit gaps</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"all_na"</span>,                       
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>, 
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,        
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_ignore_visit_gaps"</span>                           
-  <span class="op">)</span> 
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _all_events.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_all_events_eof_date, rwpfs_all_events_event_type, rwpfs_all_events_date, rwpfs_all_events_days, rwpfs_all_events_event, rwpfs_all_events_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _omit_le_14d.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_omit_le_14d_eof_date, rwpfs_omit_le_14d_event_type, rwpfs_omit_le_14d_date, rwpfs_omit_le_14d_days, rwpfs_omit_le_14d_event, rwpfs_omit_le_14d_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _only_radiographic.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_only_radiographic_eof_date, rwpfs_only_radiographic_event_type, rwpfs_only_radiographic_date, rwpfs_only_radiographic_days, rwpfs_only_radiographic_event, rwpfs_only_radiographic_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.1 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _impute_progression.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_impute_progression_eof_date, rwpfs_impute_progression_event_type, rwpfs_impute_progression_date, rwpfs_impute_progression_days, rwpfs_impute_progression_event, rwpfs_impute_progression_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.1 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _censor_at_lot_change.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_censor_at_lot_change_eof_date, rwpfs_censor_at_lot_change_event_type, rwpfs_censor_at_lot_change_date, rwpfs_censor_at_lot_change_days, rwpfs_censor_at_lot_change_event, rwpfs_censor_at_lot_change_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.2 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _ignore_visit_gaps.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_ignore_visit_gaps_eof_date, rwpfs_ignore_visit_gaps_event_type, rwpfs_ignore_visit_gaps_date, rwpfs_ignore_visit_gaps_days, rwpfs_ignore_visit_gaps_event, rwpfs_ignore_visit_gaps_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.3 s]</span></span></code></pre></div>
-<p><br></p>
-<p>Now that we have all these different rwPFS endpoints, let’s compare them using <code>fi_compare_rwPFS</code>:</p>
-<p><br></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_compare_rwPFS.html" class="external-link">fi_compare_rwPFS</a></span><span class="op">(</span>
-    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>                         <span class="co">#Specify the rwPFS labels to be tabulated (in the desired order)</span>
-      <span class="st">"_no_pseudoprogression"</span>,
-      <span class="st">"_all_events"</span>,
-      <span class="st">"_omit_le_14d"</span>,
-      <span class="st">"_only_radiographic"</span>,
-      <span class="st">"_impute_progression"</span>,
-      <span class="st">"_censor_at_lot_change"</span>,
-      <span class="st">"_ignore_visit_gaps"</span>
-    <span class="op">)</span>,
-    reference <span class="op">=</span> <span class="st">"_no_pseudoprogression"</span>,
-    incremental_deaths_column <span class="op">=</span> <span class="cn">FALSE</span> 
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_compare_rwpfs()</span> ──────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Comparing rwPFS definitions with the following labels: _no_pseudoprogression, _all_events, _omit_le_14d, _only_radiographic, _impute_progression, _censor_at_lot_change, _ignore_visit_gaps</span>
-<span class="co">#&gt; Warning: `select_()` was deprecated in dplyr 0.7.0.</span>
-<span class="co">#&gt; Please use `select()` instead.</span>
-<span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="21%">
-<col width="10%">
-<col width="12%">
-<col width="6%">
-<col width="14%">
-<col width="17%">
-<col width="17%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">rwPFS definition</th>
-<th align="right">Censoring</th>
-<th align="right">Progression</th>
-<th align="right">Death</th>
-<th align="right">Percent death</th>
-<th align="left">KM median</th>
-<th align="left">Hazard ratio</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">No pseudoprogression</td>
-<td align="right">3345</td>
-<td align="right">3592</td>
-<td align="right">1164</td>
-<td align="right">24.5</td>
-<td align="left">6.51 (6.28-6.7)</td>
-<td align="left">1 (reference)</td>
-</tr>
-<tr class="even">
-<td align="left">All events</td>
-<td align="right">3331</td>
-<td align="right">3614</td>
-<td align="right">1156</td>
-<td align="right">24.2</td>
-<td align="left">6.44 (6.24-6.67)</td>
-<td align="left">1.01 (0.97-1.05)</td>
-</tr>
-<tr class="odd">
-<td align="left">Omit le 14d</td>
-<td align="right">3370</td>
-<td align="right">3550</td>
-<td align="right">1181</td>
-<td align="right">25.0</td>
-<td align="left">6.54 (6.34-6.77)</td>
-<td align="left">0.99 (0.95-1.03)</td>
-</tr>
-<tr class="even">
-<td align="left">Only radiographic</td>
-<td align="right">3385</td>
-<td align="right">3518</td>
-<td align="right">1198</td>
-<td align="right">25.4</td>
-<td align="left">6.57 (6.41-6.83)</td>
-<td align="left">0.99 (0.95-1.03)</td>
-</tr>
-<tr class="odd">
-<td align="left">Impute progression</td>
-<td align="right">2899</td>
-<td align="right">4199</td>
-<td align="right">1003</td>
-<td align="right">19.3</td>
-<td align="left">4.83 (4.67-4.96)</td>
-<td align="left">1.29 (1.24-1.35)</td>
-</tr>
-<tr class="even">
-<td align="left">Censor at lot change</td>
-<td align="right">4165</td>
-<td align="right">2908</td>
-<td align="right">1028</td>
-<td align="right">26.1</td>
-<td align="left">6.54 (6.28-6.77)</td>
-<td align="left">0.98 (0.94-1.02)</td>
-</tr>
-<tr class="odd">
-<td align="left">Ignore visit gaps</td>
-<td align="right">2648</td>
-<td align="right">4242</td>
-<td align="right">1211</td>
-<td align="right">22.2</td>
-<td align="left">6.8 (6.57-7)</td>
-<td align="left">0.93 (0.9-0.97)</td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
-<p>The obtained table gives an overview across the rwPFS definitions we’re considering. It compares the no. of patients censored, with progression, or dying, as well as the percentage of rwPFS events (death and progression combined) that are death.</p>
-<p>Kaplan-Meier median and hazard ratio relative to the reference definition give an impression of how big the impact on corresponding analysis outcomes would be. Note that to obtain the hazard ratio, a cox regression was fitted to data of twice the same patients but with different endpoints. Since the Cox model assumes the data from two compared groups to be independent, this is a bit of a stretch. The HR should therefore cautiously be interpreted as a crude indication of expected impact on any HR analyses, in order to avoid doing full senstivity analyses with all rwPFS definitions.</p>
-<p>Glancing at HR’s across all definitions, we find that in most cases, hazard ratios should be little affected by the exact rwPFS definition, with two exceptions: imputing progression increases the event rate considerably, and not ensuring continuous progression follow-up slightly reduces the event rate, presumably due to progression events going missing.</p>
-<p>With ‘imputing progression’ having the strongest impact, arguing for this definition would require strong evidence that there is a substantial amount of missing information in the progression data, and that line-change would be a reliable indicator of progression. We consider this not to be the case and conclude that imputing progression at line change is not to be recommended.</p>
-<p>Not ensuring continuous follow-up by not censoring patients at the start of any visit gap of 90d or longer decreases the event rate, which suggests that indeed the progression information in patients with long gaps is incomplete. Consequently, we consider it reasonable to censor patients at the start of any long gaps, as is done in the reference definition.</p>
-<p>Apart from ‘Ignore visit gaps’ and ‘Impute progression,’ all tested definitions appear sensible and differ very little in terms of hazard ratios or median rwPFS.</p>
-<p><br></p>
-<p>A remaining question is how long the time window for capturing deaths should be, after the end of progression follow-up. We’ve chosen 30 days above, but mostly because that’s what <span class="citation">Mhatre (2021)</span> and <span class="citation">Ton (2021)</span> did.</p>
-<p><br></p>
-<p>There may not be one single “right” value for the size of this window. However, one way of verifying if a given value is sensible is to vary the length of this window and check how many additional deaths are captured when extending it. The idea here is that we want to capture most of the deaths that are correlated with the end of progression follow-up, meaning they happen shortly after. In addition, we want to keep the window as small as possible to avoid missing any progression events. A pragmatic choice may be made that reconciles these opposing objectives as well as possible.</p>
-<p><br><br>
-We can calculate rwPFS endpoints with varying window lengths as follows:</p>
-<p><br></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#removing all previous rwPFS columns</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_select.html" class="external-link">fi_select</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"rwpfs"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>     
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">0</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_0d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">10</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_10d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">20</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_20d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">30</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_30d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">40</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_40d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">50</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_50d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">60</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_60d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">70</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_70d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">80</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_80d_window"</span>                                   
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_calc_rwPFS.html" class="external-link">fi_calc_rwPFS</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,                          
-    visit_gap_start_date <span class="op">=</span> <span class="st">"lastvisitbeforegap"</span>,           
-    last_clinic_note_date <span class="op">=</span> <span class="st">"lastclinicnotedate_nopseudo"</span>,
-    progression_date <span class="op">=</span> <span class="st">"progressiondate_nopseudo"</span>,         
-    last_activity_date <span class="op">=</span> <span class="st">"lastactivitydate"</span>,               
-    death_date <span class="op">=</span> <span class="st">"dateofdeath"</span>,
-    death_window_days <span class="op">=</span> <span class="fl">90</span>,                                
-    max_follow_up_days <span class="op">=</span> <span class="fl">1200</span>,                             
-    label <span class="op">=</span> <span class="st">"_90d_window"</span>                                   
-  <span class="op">)</span> 
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [131.3 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 0d after end of progression follow-up. Label: _0d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_0d_window_eof_date, rwpfs_0d_window_event_type, rwpfs_0d_window_date, rwpfs_0d_window_days, rwpfs_0d_window_event, rwpfs_0d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.3 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 10d after end of progression follow-up. Label: _10d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_10d_window_eof_date, rwpfs_10d_window_event_type, rwpfs_10d_window_date, rwpfs_10d_window_days, rwpfs_10d_window_event, rwpfs_10d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.4 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 20d after end of progression follow-up. Label: _20d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_20d_window_eof_date, rwpfs_20d_window_event_type, rwpfs_20d_window_date, rwpfs_20d_window_days, rwpfs_20d_window_event, rwpfs_20d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.5 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 30d after end of progression follow-up. Label: _30d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_30d_window_eof_date, rwpfs_30d_window_event_type, rwpfs_30d_window_date, rwpfs_30d_window_days, rwpfs_30d_window_event, rwpfs_30d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.5 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 40d after end of progression follow-up. Label: _40d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_40d_window_eof_date, rwpfs_40d_window_event_type, rwpfs_40d_window_date, rwpfs_40d_window_days, rwpfs_40d_window_event, rwpfs_40d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.6 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 50d after end of progression follow-up. Label: _50d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_50d_window_eof_date, rwpfs_50d_window_event_type, rwpfs_50d_window_date, rwpfs_50d_window_days, rwpfs_50d_window_event, rwpfs_50d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.7 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 60d after end of progression follow-up. Label: _60d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_60d_window_eof_date, rwpfs_60d_window_event_type, rwpfs_60d_window_date, rwpfs_60d_window_days, rwpfs_60d_window_event, rwpfs_60d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.7 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 70d after end of progression follow-up. Label: _70d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_70d_window_eof_date, rwpfs_70d_window_event_type, rwpfs_70d_window_date, rwpfs_70d_window_days, rwpfs_70d_window_event, rwpfs_70d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.8 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 80d after end of progression follow-up. Label: _80d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_80d_window_eof_date, rwpfs_80d_window_event_type, rwpfs_80d_window_date, rwpfs_80d_window_days, rwpfs_80d_window_event, rwpfs_80d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.1s [131.9 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_rwPFS()</span> ──────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first rwPFS event after lot1startdate, including death events occurring up to 90d after end of progression follow-up. Label: _90d_window.</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">rwpfs_90d_window_eof_date, rwpfs_90d_window_event_type, rwpfs_90d_window_date, rwpfs_90d_window_days, rwpfs_90d_window_event, rwpfs_90d_window_months</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.5s [132.3 s]</span></span></code></pre></div>
-<p><br></p>
-<p>and then compare them like before, but this time adding an ‘incremental deaths’ column to the output, indicating how many additional deaths are captured by extending the window by 10 more days</p>
-<p><br></p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_compare_rwPFS.html" class="external-link">fi_compare_rwPFS</a></span><span class="op">(</span>
-    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">9</span><span class="op">*</span><span class="fl">10</span>, <span class="st">"d_window"</span><span class="op">)</span>,                         <span class="co">#Specify the rwPFS labels to be tabulated (in the desired order)</span>
-    reference <span class="op">=</span> <span class="st">"_30d_window"</span>,
-    incremental_deaths_column <span class="op">=</span> <span class="cn">TRUE</span> 
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu">kable</span><span class="op">(</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_compare_rwpfs()</span> ──────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Comparing rwPFS definitions with the following labels: _0d_window, _10d_window, _20d_window, _30d_window, _40d_window, _50d_window, _60d_window, _70d_window, _80d_window, _90d_window</span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="15%">
-<col width="8%">
-<col width="10%">
-<col width="5%">
-<col width="16%">
-<col width="12%">
-<col width="15%">
-<col width="15%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">rwPFS definition</th>
-<th align="right">Censoring</th>
-<th align="right">Progression</th>
-<th align="right">Death</th>
-<th align="right">Incremental deaths</th>
-<th align="right">Percent death</th>
-<th align="left">KM median</th>
-<th align="left">Hazard ratio</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">0d window</td>
-<td align="right">4329</td>
-<td align="right">3592</td>
-<td align="right">180</td>
-<td align="right">NA</td>
-<td align="right">4.8</td>
-<td align="left">7.82 (7.59-8.08)</td>
-<td align="left">0.8 (0.77-0.84)</td>
-</tr>
-<tr class="even">
-<td align="left">10d window</td>
-<td align="right">4027</td>
-<td align="right">3592</td>
-<td align="right">482</td>
-<td align="right">302</td>
-<td align="right">11.8</td>
-<td align="left">7.39 (7.23-7.62)</td>
-<td align="left">0.86 (0.83-0.9)</td>
-</tr>
-<tr class="odd">
-<td align="left">20d window</td>
-<td align="right">3653</td>
-<td align="right">3592</td>
-<td align="right">856</td>
-<td align="right">374</td>
-<td align="right">19.2</td>
-<td align="left">6.93 (6.67-7.13)</td>
-<td align="left">0.94 (0.9-0.98)</td>
-</tr>
-<tr class="even">
-<td align="left">30d window</td>
-<td align="right">3345</td>
-<td align="right">3592</td>
-<td align="right">1164</td>
-<td align="right">308</td>
-<td align="right">24.5</td>
-<td align="left">6.51 (6.28-6.7)</td>
-<td align="left">1 (reference)</td>
-</tr>
-<tr class="odd">
-<td align="left">40d window</td>
-<td align="right">3134</td>
-<td align="right">3592</td>
-<td align="right">1375</td>
-<td align="right">211</td>
-<td align="right">27.7</td>
-<td align="left">6.24 (6.08-6.44)</td>
-<td align="left">1.04 (1-1.08)</td>
-</tr>
-<tr class="even">
-<td align="left">50d window</td>
-<td align="right">2972</td>
-<td align="right">3592</td>
-<td align="right">1537</td>
-<td align="right">162</td>
-<td align="right">30.0</td>
-<td align="left">6.11 (5.95-6.24)</td>
-<td align="left">1.07 (1.03-1.11)</td>
-</tr>
-<tr class="odd">
-<td align="left">60d window</td>
-<td align="right">2863</td>
-<td align="right">3592</td>
-<td align="right">1646</td>
-<td align="right">109</td>
-<td align="right">31.4</td>
-<td align="left">6.01 (5.85-6.18)</td>
-<td align="left">1.08 (1.04-1.13)</td>
-</tr>
-<tr class="even">
-<td align="left">70d window</td>
-<td align="right">2790</td>
-<td align="right">3592</td>
-<td align="right">1719</td>
-<td align="right">73</td>
-<td align="right">32.4</td>
-<td align="left">5.98 (5.75-6.14)</td>
-<td align="left">1.1 (1.05-1.14)</td>
-</tr>
-<tr class="odd">
-<td align="left">80d window</td>
-<td align="right">2724</td>
-<td align="right">3592</td>
-<td align="right">1785</td>
-<td align="right">66</td>
-<td align="right">33.2</td>
-<td align="left">5.95 (5.72-6.08)</td>
-<td align="left">1.1 (1.06-1.15)</td>
-</tr>
-<tr class="even">
-<td align="left">90d window</td>
-<td align="right">2678</td>
-<td align="right">3592</td>
-<td align="right">1831</td>
-<td align="right">46</td>
-<td align="right">33.8</td>
-<td align="left">5.88 (5.68-6.05)</td>
-<td align="left">1.11 (1.07-1.16)</td>
-</tr>
-</tbody>
-</table>
-<p><br></p>
-<p>Similarly as before, we are now able to compare different rwPFS definitions at a glance and examine the impact of extending the time window for capturing death events.</p>
-<p><br></p>
-<p>First, a time-window of 0 days corresponds to a reasonably substantial HR difference of 0.2 compared to the reference (30d window). This indicates that indeed it is important to capture death events occuring after end of progression follow-up. We can also see, that the effect of extending the window from 30d to 90d changes the HR by 0.11, suggesting that the effect of extending the window further is diminishing rapidly. This is reflected in the ‘Incremental deaths’ column as well: for the each 10-day period up to 30 days we capture approximately 300 more deaths, with this number dropping rapidly thereafter. It is hard to tell where exactly the cutoff should be made - but it looks like 30d to 60d is reasonable since most censoring-related deaths appear to be captured, and further extension has negligible impact on hazard ratios.</p>
-<p><br></p>
-</div>
-<div class="section level1">
-<h1 id="rwpfs-in-cancers-other-than-ansclc-and-custom-filtering-of-progression-events">rwPFS in cancers other than aNSCLC, and custom filtering of progression events<a class="anchor" aria-label="anchor" href="#rwpfs-in-cancers-other-than-ansclc-and-custom-filtering-of-progression-events"></a>
-</h1>
-<p><br></p>
-<p>The above examples all used the aNSCLC datamart - how can rwPFS be calculated for other datamarts?</p>
-<p><br></p>
-<p>There are three points to consider:</p>
-<ul>
-<li><p><code>fi_calc_rwPFS</code> and <code>fi_compare_rwPFS</code> can be used in exactly the same way as illustrated above.</p></li>
-<li><p>Which rwPFS definitions are most appropriate must be determined individually for other patient populations.</p></li>
-<li><p><code>fi_add_progression</code> makes assumptions about the structure of the <code>PROGRESSION</code> table in the Flatiron database, which may complicate its use with certain datamarts. However, the function can be tweaked by using the <code>prog_filter_expression</code> argument. With it, a logical R expression (involving unquoted table column names) can be supplied, and only progression events are included where this expression evaluates to “TRUE.” This can also be used for more fine-grained filtering of progression events in the aNSCLC datamart.</p></li>
-</ul>
-<p><br></p>
-<p>For a start, let’s look what the <code>PROGRESSION</code> table looks like in the aNSCLC datamart</p>
-<p><br></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_read_table.html" class="external-link">fi_read_table</a></span><span class="op">(</span>
-    table_name <span class="op">=</span> <span class="st">"ENHANCED_ADVNSCLCPROGRESSION"</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> 
-<span class="co">#&gt; <span style="color: #949494;"># Source:   lazy query [?? x 8]</span></span>
-<span class="co">#&gt; <span style="color: #949494;"># Database: postgres</span></span>
-<span class="co"><span style="color: #949494;">#&gt; #   [bretscm2@redshift-01-eu.dap.apollo.roche.com:5439/flatiron_edm]</span></span>
-<span class="co">#&gt;   patientid  progressiondate isradiographicev… ispathologicevi… isclinicalasses…</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> F038BF370… 2018-05-09      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> F038C52A0… 2021-04-14      Yes               Yes              No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> F038C52A0… 2021-07-27      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> F038CEBAB… 2019-03-11      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> F038CEBAB… 2019-06-10      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> F038CEBAB… 2019-08-07      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 3 more variables: ismixedresponse &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   ispseudoprogressionmentioned &lt;chr&gt;, lastclinicnotedate &lt;date&gt;</span></span></code></pre></div>
-<p><br></p>
-<p>Knowing the structure of the progression table, we can now select radiographically confirmed progression events that are not pseudoprogression using the <code>prog_filter_expression</code> argument - which yields the same result as what we get by using the <code>require_radiographic</code> and <code>exclude_pseudoprogression</code> arguments.</p>
-<p><br></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk</span> <span class="op">&lt;-</span> <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="co">#remove previously generated columns</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_select.html" class="external-link">fi_select</a></span><span class="op">(</span> 
-    <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"progressiondate"</span><span class="op">)</span>, 
-    <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"lastclinicnotedate"</span><span class="op">)</span>, 
-    <span class="op">-</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html" class="external-link">contains</a></span><span class="op">(</span><span class="st">"rwpfs"</span><span class="op">)</span>
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  <span class="co">#This is how we filtered progression events before</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_progression.html" class="external-link">fi_add_progression</a></span><span class="op">(</span>
-      start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,          
-      require_radiographic <span class="op">=</span> <span class="cn">TRUE</span>,          
-      exclude_pseudoprogression <span class="op">=</span> <span class="cn">TRUE</span>,      
-      discard_n_days <span class="op">=</span> <span class="fl">0</span>,                   
-      label <span class="op">=</span> <span class="st">"_radio_nopseudo"</span>,                  
-      prog_filter_expression <span class="op">=</span> <span class="cn">NULL</span>          
-  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  
-  
-  <span class="co">#This is the same using prog_filter_expression instead</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_progression.html" class="external-link">fi_add_progression</a></span><span class="op">(</span>
-      start_date <span class="op">=</span> <span class="st">"lot1startdate"</span>,          
-      require_radiographic <span class="op">=</span> <span class="cn">FALSE</span>,          <span class="co">#These are now not used      </span>
-      exclude_pseudoprogression <span class="op">=</span> <span class="cn">FALSE</span>,     <span class="co">#These are now not used</span>
-      discard_n_days <span class="op">=</span> <span class="fl">0</span>,                   
-      label <span class="op">=</span> <span class="st">"_prog_filter_expression"</span>,                  
-      prog_filter_expression <span class="op">=</span> <span class="st">"isradiographicevidence == 'Yes' &amp;  ispseudoprogressionmentioned == 'No'"</span>     
-  <span class="op">)</span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [132.4 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_progression()</span> ────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: TRUE. Exclude_pseudoprogression: TRUE. Label: "_radio_nopseudo". Expression for additional filtering of progression events: none.</span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_ADVNSCLCPROGRESSION</span></span>
-<span class="co">#&gt; Joining, by = "patientid"</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">progressiondate_radio_nopseudo, lastclinicnotedate_radio_nopseudo</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 11.4s [143.8 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_progression()</span> ────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first progression event after lot1startdate, discarding events within the first 0 days. Require_radiographic: FALSE. Exclude_pseudoprogression: FALSE. Label: "_prog_filter_expression". Expression for additional filtering of progression events: "isradiographicevidence == 'Yes' &amp;  ispseudoprogressionmentioned == 'No'"</span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_ADVNSCLCPROGRESSION</span></span>
-<span class="co">#&gt; Joining, by = "patientid"</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">progressiondate_prog_filter_expression, lastclinicnotedate_prog_filter_expression</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 11.6s [155.4 s]</span></span>
-  
-  <span class="co">#This is to demonstrate that the two ways are exactly equivalent</span>
-  <span class="va">fk</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_pull_data.html" class="external-link">fi_pull_data</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-    <span class="op">{</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/all.html" class="external-link">all</a></span><span class="op">(</span><span class="va">.</span><span class="op">$</span><span class="va">progressiondate_radio_nopseudo</span> <span class="op">==</span> <span class="va">.</span><span class="op">$</span><span class="va">progressiondate_prog_filter_expression</span><span class="op">)</span>
-    <span class="op">}</span>
-<span class="co">#&gt; [1] NA</span></code></pre></div>
-<p><br><br>
-As we can see, the two ways of filtering progression events are equivalent. <br></p>
-<p>Note: require_radiographic or exclude_pseudoprogression arguments generate filter expressions that are simply concatenated with prog_filter_expression using logical <code>AND</code>.</p>
-<p><br></p>
-<p>To do this in Metastatic breastcancer, we run</p>
-<p><br></p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_start.html" class="external-link">fi_start</a></span><span class="op">(</span><span class="st">"MetastaticBreastCancer"</span><span class="op">)</span>
-<span class="co">#&gt; Trying to access in-memory cache of MDH connections...</span>
-<span class="co">#&gt; Reading connections from the package config file...</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_connect()</span> ──────────────────────────────────────────────────────────────</span>
-<span class="co">#&gt; Trying to access in-memory cache of MDH connections...</span>
-<span class="co">#&gt; Reading connections from the package config file...</span>
-<span class="co">#&gt; Note    : Connecting to database 'flatiron_edm' on server 'redshift-01-eu.dap.apollo.roche.com'</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_create()</span> ─────────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : FlatironKitchen  v1.0.15 'Tiramisu'</span>
-<span class="co">#&gt; Argument: <span style="color: #BB00BB;">title = 'bretscm2's 2022-03-15 MetastaticBreastCancer kitchen'</span></span>
-<span class="co">#&gt; Note    : Using the latest Flatiron delivery: Feb-22</span>
-<span class="co">#&gt; Argument: <span style="color: #BB00BB;">year_month = '2022_02'</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_cohort_start()</span> ───────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_METASTATICBREAST</span></span>
-<span class="co">#&gt; Warning : <span style="color: #BB0000;">1,027 (3.6%) patients appear in at least one other enhanced cohort.</span></span>
-<span class="co">#&gt; Cohort  : <span style="color: #00BB00;">28,161</span> patients</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">patientid, diagnosisdate, metdiagnosisdate, groupstage, multiple</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 1.7s [1.7 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_demographics()</span> ───────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">DEMOGRAPHICS</span></span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">PRACTICE</span></span>
-<span class="co">#&gt; Warning : <span style="color: #BB0000;">162 patient(s) are associated with different practice types. For these patients only first practice type after sorting will be associated</span></span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">birthyear, gender, race, ethnicity, state, practiceid, practicetype, primaryphysicianid, multiple_practicetype</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 9.1s [10.8 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_calc_region()</span> ────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Using State -&gt; Region mapping = 'phc'</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">region</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [10.8 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_calc_raceethnicity()</span> ─────────────────────────────────────────────────── </span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">raceethnicity</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [10.9 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_mortality()</span> ──────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Argument: <span style="color: #BB00BB;">impute_method = '15'</span></span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_MORTALITY</span></span>
-<span class="co">#&gt; Warning : <span style="color: #BB0000;">16 (0.1%) patient(s) had DateOfDeath values unlike YYYY-MM and will be imputed based on impute_method_mm</span></span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">dateofdeath, valid_dateofdeath</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.4s [11.2 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_calc_death()</span> ─────────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Argument: <span style="color: #BB00BB;">method = 'non_miss_dod'</span></span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">death</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [11.2 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_lastdates()</span> ──────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">VISIT</span></span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">MEDICATIONADMINISTRATION</span></span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">LAB</span></span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">VITALS</span></span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">lastvisitdate, lastadmindate, lastlabdate, lastvitalsdate</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 1.8s [13 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_calc_lastactivity_date()</span> ─────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : lastactivitydate = max(lastvisitdate, lastadmindate, lastlabdate, lastvitalsdate, enddate)</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">enddate, lastactivitydate</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0.7s [13.8 s]</span></span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_calc_lastcontact_date()</span> ──────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : lastcontactdate = max(dateofdeath, lastvisitdate, lastadmindate, lastlabdate, lastvitalsdate)</span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">lastcontactdate</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 0s [13.8 s]</span></span>
-
-<span class="va">fk2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_read_table.html" class="external-link">fi_read_table</a></span><span class="op">(</span>table_name <span class="op">=</span> <span class="st">"ENHANCED_METBREASTPROGRESSION"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-   <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span> 
-<span class="co">#&gt; <span style="color: #949494;"># Source:   lazy query [?? x 10]</span></span>
-<span class="co">#&gt; <span style="color: #949494;"># Database: postgres</span></span>
-<span class="co"><span style="color: #949494;">#&gt; #   [bretscm2@redshift-01-eu.dap.apollo.roche.com:5439/flatiron_edm]</span></span>
-<span class="co">#&gt;   patientid  progressiondate isradiographicev… ispathologicevi… isclinicalasses…</span>
-<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">1</span> F08BB8E4B… 2021-03-01      Yes               Yes              No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">2</span> F08BCE302… 2011-12-07      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span> F08BCE302… 2012-06-15      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span> F08BCE302… 2013-01-16      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">5</span> F08BCE302… 2013-05-14      Yes               Yes              No              </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">6</span> F08BCE302… 2013-07-16      Yes               No               No              </span>
-<span class="co">#&gt; <span style="color: #949494;"># … with 5 more variables: isphysicalexamevidence &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   istumormarkersonly &lt;chr&gt;, ismixedresponse &lt;chr&gt;,</span></span>
-<span class="co">#&gt; <span style="color: #949494;">#   ispseudoprogressionmentioned &lt;chr&gt;, lastclinicnotedate &lt;date&gt;</span></span></code></pre></div>
-<p><br></p>
-<p>This progression table has additional columns/flags while containing the <code>ispseudoprogressionmentioned</code> and <code>isradiographicevidence</code> columns we’ve seen in the aNSCLC progression table. All these can be used jointly to filter progression events, for example</p>
-<p><br></p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fk2</span> <span class="op">&lt;-</span> <span class="va">fk2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/FlatironKitchen/man/fi_add_progression.html" class="external-link">fi_add_progression</a></span><span class="op">(</span>
-    start_date <span class="op">=</span> <span class="st">"metdiagnosisdate"</span>,
-    require_radiographic <span class="op">=</span> <span class="cn">FALSE</span>,
-    exclude_pseudoprogression <span class="op">=</span> <span class="cn">TRUE</span>,
-    discard_n_days <span class="op">=</span> <span class="fl">0</span>,
-    label <span class="op">=</span> <span class="st">""</span>,
-    prog_filter_expression <span class="op">=</span> <span class="st">"istumormarkersonly == 'No'"</span>
-  <span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; ── <span style="color: #00BBBB;">fi_add_progression()</span> ────────────────────────────────────────────────────── </span>
-<span class="co">#&gt; Note    : Adding first progression event after metdiagnosisdate, discarding events within the first 0 days. Require_radiographic: FALSE. Exclude_pseudoprogression: TRUE. Label: none. Expression for additional filtering of progression events: "istumormarkersonly == 'No'"</span>
-<span class="co">#&gt; Touching: <span style="color: #BBBB00;">ENHANCED_METBREASTPROGRESSION</span></span>
-<span class="co">#&gt; Joining, by = "patientid"</span>
-<span class="co">#&gt; Warning : <span style="color: #BB0000;">3440 patient(s) had no progression information abstracted beyond startdate (lastclinicnotedate set to missing)</span></span>
-<span class="co">#&gt; NewCols : <span style="color: #0000BB;">progressiondate, lastclinicnotedate</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Time    : 52.7s [66.5 s]</span></span></code></pre></div>
-<p><br></p>
-<p>In this manner we can use <code>fi_add_progression</code> with any progression table that has a <code>progressiondate</code> and a <code>lastclinicnotedate</code> column.</p>
-<p><br></p>
 </div>
 <div class="section level1">
 <h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
