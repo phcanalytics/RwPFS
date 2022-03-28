@@ -78,7 +78,7 @@
       <h1 data-toc-skip>Real-world Progression-free Survival (rwPFS)</h1>
                         <h4 data-toc-skip class="author">Michael Bretscher</h4>
             
-            <h4 data-toc-skip class="date">2022-03-25</h4>
+            <h4 data-toc-skip class="date">2022-03-28</h4>
       
       
       <div class="hidden name"><code>real_world_PFS.Rmd</code></div>
@@ -329,7 +329,7 @@
     .start_date <span class="op">=</span> <span class="st">"baseline_date"</span>,                    <span class="co">#baseline date for measuring time-to-event</span>
     .visit_gap_start_date <span class="op">=</span> <span class="st">"visit_gap_start_date"</span>,   <span class="co">#the start date of any gap in visits &gt;90 days  </span>
     .last_progression_abstraction_date <span class="op">=</span> <span class="st">"last_progression_abstraction_date"</span>, 
-    .progression_date <span class="op">=</span> <span class="st">"progression_date_radiographic_only"</span>,
+    .progression_date <span class="op">=</span> <span class="st">"progression_date_no_pseudoprogression"</span>,
     .last_activity_date <span class="op">=</span> <span class="st">"last_activity_date"</span>,       <span class="co">#the date of last activity in the database</span>
     .death_date <span class="op">=</span> <span class="st">"death_date"</span>,                       <span class="co">#the date of death</span>
     .death_window_days <span class="op">=</span> <span class="fl">30</span>,                          <span class="co">#include death events &lt;30d after progression EOF</span>
@@ -398,8 +398,8 @@
 <span class="co">#&gt; $ rwPFS_radiographic_only_eof_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-04-07, 2010-10-05, 2010-10…</span>
 <span class="co">#&gt; $ rwPFS_radiographic_only_event_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Progression", "Censored", "Prog…</span>
 <span class="co">#&gt; $ rwPFS_radiographic_only_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-01-27, 2010-10-05, 2010-08…</span>
-<span class="co">#&gt; $ rwPFS_radiographic_only_days          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 26, 277, 235, 30, 31, 69, 173, 1…</span>
-<span class="co">#&gt; $ rwPFS_radiographic_only_event         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0,…</span>
+<span class="co">#&gt; $ rwPFS_radiographic_only_days          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 26, 277, 235, 30, 31, 69, 96, 10…</span>
+<span class="co">#&gt; $ rwPFS_radiographic_only_event         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0,…</span>
 <span class="co">#&gt; $ rwPFS_radiographic_only_months        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8542094, 9.1006160, 7.7207392,…</span>
 <span class="co">#&gt; $ rwPFS_no_pseudoprogression_eof_date   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2010-04-07, 2010-10-05, 2010-10…</span>
 <span class="co">#&gt; $ rwPFS_no_pseudoprogression_event_type <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Progression", "Censored", "Prog…</span>
@@ -413,7 +413,7 @@
 <span class="co">#&gt; $ rwPFS_ignore_visit_gaps_days          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 26, 277, 235, 30, 31, 69, 96, 10…</span>
 <span class="co">#&gt; $ rwPFS_ignore_visit_gaps_event         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0,…</span>
 <span class="co">#&gt; $ rwPFS_ignore_visit_gaps_months        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8542094, 9.1006160, 7.7207392,…</span></code></pre></div>
-<p>Let’s compare these different rwPFS endpoints using <code>compare_rwPFS</code> to see if any rwPFS outcomes are sensitive to the exact endpoint definition:</p>
+<p>Let’s compare these different rwPFS endpoints using <code>compare_rwPFS</code> to see if rwPFS outcomes are sensitive to the exact endpoint definition:</p>
 <p><br></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
@@ -476,12 +476,12 @@
 </tr>
 <tr class="odd">
 <td align="left">Radiographic only</td>
-<td align="right">489</td>
-<td align="right">328</td>
-<td align="right">175</td>
-<td align="right">34.8</td>
-<td align="left">6.01 (5.29-6.74)</td>
-<td align="left">0.95 (0.84-1.07)</td>
+<td align="right">475</td>
+<td align="right">343</td>
+<td align="right">174</td>
+<td align="right">33.7</td>
+<td align="left">5.68 (5.06-6.47)</td>
+<td align="left">0.99 (0.88-1.12)</td>
 </tr>
 <tr class="even">
 <td align="left">No pseudoprogression</td>
@@ -1090,7 +1090,7 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/compare_rwPFS.html">compare_rwPFS</a></span><span class="op">(</span>
-    .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">9</span><span class="op">*</span><span class="fl">10</span>, <span class="st">"d_window"</span><span class="op">)</span>,        <span class="co">#Specify the rwPFS labels to be tabulated (in the desired order)</span>
+    .labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"_"</span>, <span class="fl">0</span><span class="op">:</span><span class="fl">9</span><span class="op">*</span><span class="fl">10</span>, <span class="st">"d_window"</span><span class="op">)</span>,<span class="co">#Specify the rwPFS labels to be tabulated (in the desired order)</span>
     .reference <span class="op">=</span> <span class="st">"_30d_window"</span>,
     .incremental_deaths_column <span class="op">=</span> <span class="cn">TRUE</span>
   <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>

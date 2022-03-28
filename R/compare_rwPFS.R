@@ -6,7 +6,7 @@
 #' @param .reference character. Label identifying the reference rwPFS definition that others are compared against.
 #' @param .incremental_deaths_column logical. Should the output table contain an additional column comparing the incremental
 #' number of death events captured from one definition to the next? Intended for comparing different \code{death_window_days}
-#' parameter values in \code{fi_calc_rwPFS}.
+#' parameter values in \code{calc_rwPFS}.
 #'
 #'
 #' @description Compares a range of different rwPFS definitions with respect to event composition, KM median time to event,
@@ -20,209 +20,245 @@
 #'
 #' \dontrun{
 #' 
-#' #Note: the FlatironKitchen package is used in these
-#' #examples for simplicity. This is not a requirement.
-#' 
-#' library(FlatironKitchen)
 #' library(dplyr)
+#' library(RwPFS) 
+#' library(survival)
 #' 
-#' #Initialize FlatironKitchen object
-#' fk <- fi_start(datamart = "AdvancedNSCLC",
-#'                title = "rwPFS in aNSCLC")  %>%
+#' 
+#' #Generate rwPFS endpoints across a range of different definitions
+#' 
+#' #Starting point is the simprog simulated dataset included in the RwPFS package
+#' df <- simprog %>% 
 #'   
-#'   #Use start of line as start_date
-#'   fi_add_lineoftherapy_flatiron(
-#'     lines = c(1, 2),
-#'     index_date = "advanceddiagnosisdate",
-#'     left = 0,
-#'     right = 90,
-#'     calc_duration = FALSE
+#'   #Start with the "_all_events" rwPFS endpoint
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 30,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_all_events"                            #Label for this rwPFS endpoint (for comparisons)
 #'   ) %>%
 #'   
-#'   #Restrict to Carboplatin & Paclitaxel in 1st line
-#'   fi_cohort_include(
-#'     lot1linename == "Carboplatin,Paclitaxel",
-#'     description = "Carboplatin & Paclitaxel in 1st line",
-#'     keep_na = FALSE
-#'   )  %>%
+#'   # Add "discard_le_14d" rwPFS
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_discard_le_14d",
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 30,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_discard_le_14d"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%  
 #'   
-#'   #Add information on any long visit gaps
-#'   fi_calc_visitgap(
-#'     index_date = "lot1startdate",
-#'     gapdays = 90,
-#'     what = "After",
-#'     force_database = FALSE
-#'   )
+#'   # Add "radiographic_only" rwPFS
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_radiographic_only",
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 30,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_radiographic_only"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%  
+#'   
+#'   # Add "no_pseudoprogression" rwPFS
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_no_pseudoprogression",
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 30,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_no_pseudoprogression"                  #Label for this rwPFS endpoint (for comparisons)
+#'   ) 
 #' 
-#' #Pull the analysis dataset from 
-#' #the FlatironKitchen object
-#' df <- fk %>%
-#'   fi_pull_data()
 #' 
-#' #Download the progression table belonging
-#' #to the current datamart
-#' progression <- fk %>%
-#'   fi_read_table(table_name="ENHANCED_ADVNSCLCPROGRESSION") %>%
-#'   collect()
+#' #add an addition rwPFS endpoint where visit gaps are ignored (not used for early censoring)
 #' 
-#' #Add progression information to analysis dataset
+#' #On a side note, supplying a custom date column as .visit_gap_start_date can e.g. be used to trick calc_rwPFS into censoring observations early (e.g. at a change of the line of therapy). 
+#' #Similarly, progression events can be imputed (e.g. at a line of therapy change) by creating a custom .progression_date column.
+#' 
 #' df <- df %>%
-#'   #select the start_date column..
-#'   select(patientid, lot1startdate) %>%
-#'   
-#'   #..and add it to the raw progression table
-#'   left_join(progression, by = "patientid") %>%
-#'   
-#'   #Aggregate progression information (one-row per patient)
-#'   filter_progression(
-#'     .start_date = "lot1startdate",
-#'     .require_radiographic = FALSE,
-#'     .exclude_pseudoprogression = TRUE,
-#'     .discard_n_days = 0,
-#'     .label = "_no_pseudo_no_mixed",
-#'     .prog_filter_expression = "ismixedresponse == 'No'"
+#'   mutate(
+#'     #adding an all_na column 
+#'     all_na = NA_character_ %>% as.Date()
 #'   ) %>%
 #'   
-#'   #Combine progression columns with analysis dataset
-#'   right_join(df, by = "patientid")
+#'   # Add "ignore_visit_gaps" rwPFS
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "all_na",                 #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 30,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_ignore_visit_gaps"                     #Label for this rwPFS endpoint (for comparisons)
+#'   )   
 #' 
-#' 
-#' #Add several different rwPFS endpoints
-#' df <- df %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 0,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_0d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 10,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_10d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 20,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_20d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 30,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_30d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 40,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_40d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 50,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_50d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 60,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_60d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 70,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_70d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 80,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_80d_window"
-#'   ) %>%
-#'   
-#'   calc_rwPFS(
-#'     .start_date = "lot1startdate",
-#'     .visit_gap_start_date = "lastvisitbeforegap",
-#'     .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-#'     .progression_date = "progressiondate_no_pseudo_no_mixed",
-#'     .last_activity_date = "lastactivitydate",
-#'     .death_date = "dateofdeath",
-#'     .death_window_days = 90,
-#'     .max_follow_up_days = 1200,
-#'     .label = "_90d_window"
-#'   ) %>%
-#'   
-#'   #Remove patients with missing rwPFS
-#'   filter(
-#'     rwPFS_0d_window_event_type != "Missing"
-#'   )
-#' 
-#' #Compare different rwPFS definitions
+#' #Compare the different rwPFS endpoints
 #' df %>%
 #'   compare_rwPFS(
-#'     .labels = paste0("_", 0:9*10, "d_window"),
+#'     .labels = c(                         #Specify the rwPFS labels to be tabulated (in the desired order)
+#'       "_all_events",
+#'       "_discard_le_14d",
+#'       "_radiographic_only",
+#'       "_no_pseudoprogression",
+#'       "_ignore_visit_gaps"
+#'     ),
+#'     .reference = "_all_events",
+#'     .incremental_deaths_column = FALSE
+#'   ) 
+#' 
+#' 
+#' 
+#' 
+#' #Generate rwPFS endpoints with different durations of the time window for capturing death events:
+#' 
+#' df <- simprog %>% 
+#'   
+#'   #Start with the "_all_events" rwPFS endpoint
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 0,                           #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_0d_window"                             #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 10,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_10d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 20,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_20d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 30,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_30d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 40,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_40d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 50,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_50d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 60,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_60d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 70,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_70d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 80,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_80d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   ) %>%
+#'   
+#'   calc_rwPFS(
+#'     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+#'     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+#'     .last_progression_abstraction_date = "last_progression_abstraction_date", 
+#'     .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+#'     .last_activity_date = "last_activity_date",       #the date of last activity in the database
+#'     .death_date = "death_date",                       #the date of death
+#'     .death_window_days = 90,                          #include death events <30d after progression EOF
+#'     .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+#'     .label = "_90d_window"                            #Label for this rwPFS endpoint (for comparisons)
+#'   )
+#' 
+#' 
+#' #Compare them, this time including an "incremental deaths" column
+#' 
+#' df %>%
+#'   compare_rwPFS(
+#'     .labels = paste0("_", 0:9*10, "d_window"),#Specify the rwPFS labels to be tabulated (in the desired order)
 #'     .reference = "_30d_window",
 #'     .incremental_deaths_column = TRUE
-#'   ) %>%
-#'   knitr::kable()
+#'   )
+#'
 #'}
 #'
 compare_rwPFS <- function(

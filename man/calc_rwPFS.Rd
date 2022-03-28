@@ -5,7 +5,7 @@
 \title{Calculate the real-world Progression-free Survival (rwPFS) endpoint}
 \usage{
 calc_rwPFS(
-  df,
+  .df,
   .start_date = NULL,
   .visit_gap_start_date = NULL,
   .last_progression_abstraction_date = NULL,
@@ -18,26 +18,26 @@ calc_rwPFS(
 )
 }
 \arguments{
-\item{df}{a data frame}
+\item{.df}{a data frame}
 
-\item{.start_date}{character. The name of a date column in df that represents
+\item{.start_date}{character. The name of a date column in .df that represents
 the baseline date}
 
-\item{.visit_gap_start_date}{character. The name of a date column in df that represents
+\item{.visit_gap_start_date}{character. The name of a date column in .df that represents
 the date of the last visit before a large (usually >90d) visit gap occurring after start_date (if any).
 Progression follow-up will be censored at this date (latest). Dates should be NA if there's no visit gap.}
 
-\item{.last_progression_abstraction_date}{character. The name of a date column in df that represents
+\item{.last_progression_abstraction_date}{character. The name of a date column in .df that represents
 the date up which real-world progression was abstracted in the database.
 Progression follow-up will be censored at this date (latest).}
 
-\item{.progression_date}{character. The name of a date column in df that represents
+\item{.progression_date}{character. The name of a date column in .df that represents
 the date of first progression after start date (if any). Dates should be NA if there's no progression.}
 
-\item{.last_activity_date}{character. The name of a date column in df that represents
+\item{.last_activity_date}{character. The name of a date column in .df that represents
 the date of last structural activity in the database. Progression follow-up will be censored at this date (latest).}
 
-\item{.death_date}{character. The name of a date column in df that represents the date of death.
+\item{.death_date}{character. The name of a date column in .df that represents the date of death.
 Dates should be NA if there's no recorded death.}
 
 \item{.death_window_days}{integer. How many days after end of progression follow-up should death events be included?
@@ -56,24 +56,24 @@ Returns a data frame with the following new data columns added:
 
 \describe{
 
-\item{rwpfs<label>_eof_date}{The end date of progression follow-up. This is the earliest non-missing date of \code{visit_gap_start_date},
-\code{last_clinic_note_date}, and \code{last_activity_date}}
+\item{rwpfs<label>_eof_date}{The end date of progression follow-up. This is the earliest non-missing date of \code{.visit_gap_start_date},
+\code{.last_progression_abstraction_date}, and \code{.last_activity_date}}
 
 \item{rwpfs<label>_event_type}{The type of rwPFS event: "Death", "Progression", "Censored", or "Missing" (if rwPFS could not be calculated)}
 
 \item{rwpfs<label>_date}{The rwPFS event- or censoring date.}
 
-\item{rwpfs<label>_days}{The time from \code{start_date} to \code{rwpfs<label>_date} in days.}
+\item{rwpfs<label>_days}{The time from \code{.start_date} to \code{rwpfs<label>_date} in days.}
 
 \item{rwpfs<label>_event}{Whether a rwPFS event was recorded (1) or the observation was censored (0) }
 
-\item{rwpfs<label>_months}{The time from \code{start_date} to \code{rwpfs<label>_date} in months.}
+\item{rwpfs<label>_months}{The time from \code{.start_date} to \code{rwpfs<label>_date} in months.}
 
 }
 
 If rwPFS could not be calculated, the \code{rwpfs<label>_event_type} will be set to "Missing", and all other columns will contain missing values.
-This can be due to one of the following reasons: missing \code{last_clinic_note_date} or <= \code{start_date}, missing \code{last_activity_date} or <= \code{start_date}, \code{last_clinic_note_date} <= \code{start_date},
-or \code{death_date} <= \code{start_date} (this can happen because death dates are rounded to mid-month in Flatiron).
+This can be due to one of the following reasons: missing \code{.last_progression_abstraction_date} <= \code{.start_date}, missing \code{.last_activity_date} or <= \code{.start_date}, \code{.last_progression_abstraction_date} <= \code{.start_date},
+or \code{.death_date} <= \code{.start_date} (this can happen because death dates are rounded to mid-month in Flatiron).
 }
 \description{
 Calculates the real-world PFS (rwPFS) endpoint given information on follow-up period, progression-, and death dates.
@@ -82,87 +82,30 @@ Calculates the real-world PFS (rwPFS) endpoint given information on follow-up pe
 
 \dontrun{
 
-#Note: the FlatironKitchen package is used in these
-#examples for simplicity. This is not a requirement.
 
-library(FlatironKitchen)
 library(dplyr)
+library(RwPFS) 
 
-#Initialize FlatironKitchen object
-fk <- fi_start(datamart = "AdvancedNSCLC",
-               title = "rwPFS in aNSCLC")  \%>\%
-  
-  #Use start of line as start_date
-  fi_add_lineoftherapy_flatiron(
-    lines = c(1, 2),
-    index_date = "advanceddiagnosisdate",
-    left = 0,
-    right = 90,
-    calc_duration = FALSE
-  ) \%>\%
-  
-  #Restrict to Carboplatin & Paclitaxel in 1st line
-  fi_cohort_include(
-    lot1linename == "Carboplatin,Paclitaxel",
-    description = "Carboplatin & Paclitaxel in 1st line",
-    keep_na = FALSE
-  )  \%>\%
-  
-  #Add information on any long visit gaps
-  fi_calc_visitgap(
-    index_date = "lot1startdate",
-    gapdays = 90,
-    what = "After",
-    force_database = FALSE
-  )
+#Starting point: the simprog simulated dataset (included in RwPFS) 
 
-#Pull the analysis dataset from 
-#the FlatironKitchen object
-df <- fk \%>\%
-  fi_pull_data()
-
-#Download the progression table belonging
-#to the current datamart
-progression <- fk \%>\%
-  fi_read_table(table_name="ENHANCED_ADVNSCLCPROGRESSION") \%>\%
-  collect()
-
-#Add progression information to analysis dataset
-df <- df \%>\%
-  #select the start_date column..
-  select(patientid, lot1startdate) \%>\%
-  
-  #..and add it to the raw progression table
-  left_join(progression, by = "patientid") \%>\%
-  
-  #Aggregate progression information (one-row per patient)
-  filter_progression(
-    .start_date = "lot1startdate",
-    .require_radiographic = FALSE,
-    .exclude_pseudoprogression = TRUE,
-    .discard_n_days = 0,
-    .label = "_no_pseudo_no_mixed",
-    .prog_filter_expression = "ismixedresponse == 'No'"
-  ) \%>\%
-  
-  #Combine progression columns with analysis dataset
-  right_join(df, by = "patientid")
-
-
-#Add rwPFS
-df <- df \%>\%
+#Add rwPFS:
+df <- simprog \%>\% 
   calc_rwPFS(
-    .start_date = "lot1startdate",
-    .visit_gap_start_date = "lastvisitbeforegap",
-    .last_progression_abstraction_date = "lastclinicnotedate_no_pseudo_no_mixed",
-    .progression_date = "progressiondate_no_pseudo_no_mixed",
-    .last_activity_date = "lastactivitydate",
-    .death_date = "dateofdeath",
-    .death_window_days = 30,
-    .max_follow_up_days = Inf,
-    .label = "_no_pseudo_no_mixed"
+    .start_date = "baseline_date",                    #baseline date for measuring time-to-event
+    .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
+    .last_progression_abstraction_date = "last_progression_abstraction_date", 
+    .progression_date = "progression_date_all_events",#the date of progression (none: NA)
+    .last_activity_date = "last_activity_date",       #the date of last activity in the database
+    .death_date = "death_date",                       #the date of death
+    .death_window_days = 30,                          #include death events <30d after progression EOF
+    .max_follow_up_days = Inf,                        #censor patients after a maximum time. 
+    .label = "_all_events"                            #Label for this rwPFS endpoint (for comparisons)
   )
 
+#View the result:
+df \%>\% 
+  select(contains("rwPFS")) \%>\% 
+  glimpse()
 
 }
 

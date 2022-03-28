@@ -358,7 +358,7 @@ df <- simprog %>%
     .start_date = "baseline_date",                    #baseline date for measuring time-to-event
     .visit_gap_start_date = "visit_gap_start_date",   #the start date of any gap in visits >90 days  
     .last_progression_abstraction_date = "last_progression_abstraction_date", 
-    .progression_date = "progression_date_radiographic_only",
+    .progression_date = "progression_date_no_pseudoprogression",
     .last_activity_date = "last_activity_date",       #the date of last activity in the database
     .death_date = "death_date",                       #the date of death
     .death_window_days = 30,                          #include death events <30d after progression EOF
@@ -435,7 +435,7 @@ df %>%
 
 
 
-Let's compare these different rwPFS endpoints using `compare_rwPFS` to see if any rwPFS outcomes are sensitive to the exact endpoint definition:
+Let's compare these different rwPFS endpoints using `compare_rwPFS` to see if rwPFS outcomes are sensitive to the exact endpoint definition:
 
 <br/>
 ```{r}
@@ -635,7 +635,7 @@ and then compare them like before, but this time adding an 'incremental deaths' 
 ```{r}
 df %>%
   compare_rwPFS(
-    .labels = paste0("_", 0:9*10, "d_window"),        #Specify the rwPFS labels to be tabulated (in the desired order)
+    .labels = paste0("_", 0:9*10, "d_window"),#Specify the rwPFS labels to be tabulated (in the desired order)
     .reference = "_30d_window",
     .incremental_deaths_column = TRUE
   ) %>%
