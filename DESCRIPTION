@@ -1,0 +1,34 @@
+Package: RwPFS
+Title: Calculate and compare a range of real-world progression-free survival (rwPFS) endpoints.
+Version: 0.0.2
+Authors@R: c( 
+    person(given = "Michael", family = "Bretscher", role = c("aut", "cre"), email = "mthbretscher@gmail.com"),
+    person("Shanmugasundaram", "Prabhu", email = "shanmup3@gene.com", role = "aut"),
+    person("Nandi", "Kalyan", email = "nandik@gene.com", role = "aut"))
+Description: Progression-free survival (PFS) is an important endpoint in clinical oncology trials. Multiple definitions of PFS are possible in real-world data (rwPFS). The RwPFS package provides tools to calculate and easily compare real-world PFS endpoints across a range of definitions.
+BugReports: https://github.com/phcanalytics/RwPFS/issues
+License: Copyright Roche
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports:
+    rlang,
+    dplyr (>= 1.0.0),
+    lubridate,
+    tidyr,
+    stringr,
+    readr,
+    survival,
+    survminer,
+    broom,
+    purrr,
+    stats
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Depends: 
+    R (>= 2.10)
