@@ -1,6 +1,6 @@
 Package: RwPFS
 Title: Calculate and compare a range of real-world progression-free survival (rwPFS) endpoints.
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: c( 
     person(given = "Michael", family = "Bretscher", role = c("aut", "cre"), email = "mthbretscher@gmail.com"),
     person("Shanmugasundaram", "Prabhu", email = "shanmup3@gene.com", role = "aut"),
