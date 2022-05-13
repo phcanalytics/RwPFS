@@ -7,7 +7,7 @@ Authors@R: c(
     person("Nandi", "Kalyan", email = "nandik@gene.com", role = "aut"))
 Description: Progression-free survival (PFS) is an important endpoint in clinical oncology trials. Multiple definitions of PFS are possible in real-world data (rwPFS). The RwPFS package provides tools to calculate and easily compare real-world PFS endpoints across a range of definitions.
 BugReports: https://github.com/phcanalytics/RwPFS/issues
-License: Copyright Roche
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
