@@ -57,7 +57,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/phcanalytics/RwPFS/">
+  <a href="https://github.com/phcanalytics/RwPFS/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,14 +88,14 @@
     
     
 <p><em>The background section gives some general context on using real-world Progression-free Survival as endpoint in oncology - if you just want to know about using the RwPFS package feel free to skip ahead to <a href="#getting-started-with-rwpfs">Getting started with RwPFS</a></em></p>
-<p><br><em>For a detailed discussion of the rwPFS endpoint see <span class="citation">Mhatre (2021)</span></em> <br><br></p>
+<p><br><em>For a detailed discussion of the rwPFS endpoint see <span class="citation">Mhatre et al. (2022)</span></em> <br><br></p>
 <div class="section level1">
 <h1 id="background-on-rwpfs">Background on rwPFS<a class="anchor" aria-label="anchor" href="#background-on-rwpfs"></a>
 </h1>
 <p>Progression-free Survival (PFS) is a commonly used time-to event endpoint in cancer trials. It is defined as the first event of either death or progression.</p>
 <p>An important difference between the PFS and Overall Survival (OS, time to death) endpoints is that PFS requires close follow-up of patients, whereas OS does not. This is because death is a one-time event, and whenever a patient is contacted alive, we know that death had not occurred previously. This is not the case when looking at progression, hence patients must be closely monitored.</p>
 <p><br></p>
-<p><strong>The mechanisms of data-collection differ between real-world data &amp; clinical trials <span class="citation">(Mhatre 2021)</span>:</strong></p>
+<p><strong>The mechanisms of data-collection differ between real-world data &amp; clinical trials <span class="citation">(Mhatre et al. 2022)</span>:</strong></p>
 <ul>
 <li><p>In clinical trials, tumor assessments are scheduled at regular intervals, and progression is assessed using standardized criteria. The reason for collecting PFS data in clinical trials is to measure treatment efficacy. Transparency and consistency of the data collection process are emphasized.</p></li>
 <li><p>In routine health care, there is commonly no protocol and no regularly scheduled tumor assessments. Progression may or may not be assessed following standard criteria - this is generally not known. Physicians may measure progression mainly in order to make treatment decisions, not to statistically compare the effectiveness of different treatments. In addition, transparency and consistency of data collection are likely to be less important objectives than cost considerations or minimization of discomfort for the patient (e.g. by avoiding unnecessary scans).</p></li>
@@ -104,12 +104,12 @@
 <p>Because of these differences, it appears sensible to speak of “real-world PFS” (<strong>rwPFS</strong>) and to treat it as a separate endpoint, distinct from trial PFS. However, due to the highly similar definitions of rwPFS and PFS, it is possible that the two endpoints may be <em>equivalent</em>, meaning they essentially lead to the same result and could be used to compare effectivness of treatments both within a particular real-world data source as well as between trial and real-world data.</p>
 <p><br></p>
 <blockquote>
-<p>Whether or not <strong>PFS</strong> and <strong>rwPFS</strong> endpoints are <strong>equivalent</strong> and can be used for comparing drug efficacy across two data sets (real-world and clinical trial) may depend on type of cancer, drug category, real-world database, and other factors. While attempts should be made to understand and ensure quality of data collection in the real-world data, this will likely never be perfect. Consequently, empirical confirmation of the equivalence of rwPFS and PFS will be needed. This can be done by replicating trial arms and comparing rwPFS and trial PFS outcomes <span class="citation">(Mhatre 2021; Ton 2021)</span>, across indications and drug categories.</p>
+<p>Whether or not <strong>PFS</strong> and <strong>rwPFS</strong> endpoints are <strong>equivalent</strong> and can be used for comparing drug efficacy across two data sets (real-world and clinical trial) may depend on type of cancer, drug category, real-world database, and other factors. While attempts should be made to understand and ensure quality of data collection in the real-world data, this will likely never be perfect. Consequently, empirical confirmation of the equivalence of rwPFS and PFS will be needed. This can be done by replicating trial arms and comparing rwPFS and trial PFS outcomes <span class="citation">(Mhatre et al. 2022; Ton et al. 2022)</span>, across indications and drug categories.</p>
 </blockquote>
 <div class="section level2">
 <h2 id="algorithm-for-calculating-rwpfs-using-flatiron-data">Algorithm for calculating rwPFS using Flatiron data<a class="anchor" aria-label="anchor" href="#algorithm-for-calculating-rwpfs-using-flatiron-data"></a>
 </h2>
-<p>Figure 1 in <span class="citation">Mhatre (2021)</span> illustrates the important elements required for calculating a rwPFS endpoint:</p>
+<p>Figure 1 in <span class="citation">Mhatre et al. (2022)</span> illustrates the important elements required for calculating a rwPFS endpoint:</p>
 <ul>
 <li><p>the start date (baseline)</p></li>
 <li><p>the date up to which progression was abstracted from clinical notes</p></li>
@@ -170,7 +170,7 @@
 <ul>
 <li><p>the aim is to capture most of - and only - the death events correlated in time with the end of follow-up.</p></li>
 <li><p>this is reminiscent of informative censoring - except in this case events occurring after the <em>end of follow-up</em> can be accessed and potentially included.</p></li>
-<li><p>reasonable values for the length of the time window can be argued based on comparison with data collection in trials, or - in a data-driven way by inspecting the drop in the number of death events as the window is being extended (see best practices below). For a detailed discussion see <span class="citation">Mhatre (2021)</span></p></li>
+<li><p>reasonable values for the length of the time window can be argued based on comparison with data collection in trials, or - in a data-driven way by inspecting the drop in the number of death events as the window is being extended (see best practices below). For a detailed discussion see <span class="citation">Mhatre et al. (2022)</span></p></li>
 <li><p>ultimately, any choice will remain arbitrary to some extent.</p></li>
 </ul>
 </li>
@@ -180,7 +180,7 @@
 <div class="section level2">
 <h2 id="best-practices-to-support-the-emergence-of-consensus-definitions">Best practices to support the emergence of consensus definitions<a class="anchor" aria-label="anchor" href="#best-practices-to-support-the-emergence-of-consensus-definitions"></a>
 </h2>
-<p>As outlined above, there is a range of possible definitions of rwPFS. To determine which of these are most closely mimicking clinical trial PFS requires discussions with subject matter experts, and it is possible that different conclusions may be reached depending on indication, drug category, analysis objective, or other factors. From our experience in aNSCLC <span class="citation">(Mhatre 2021; Ton 2021)</span> several definitions - not only one - remain viable options even after discussion with experts, and eventually a pragmatic choice must be made. Despite a desire for standardization, we reached the conclusion that defining a single standard is not helpful given the current state of knowledge, and that instead we should promote best practices that support the emergence of - preferably rather few - standard definitions via publications in the scientific literature.</p>
+<p>As outlined above, there is a range of possible definitions of rwPFS. To determine which of these are most closely mimicking clinical trial PFS requires discussions with subject matter experts, and it is possible that different conclusions may be reached depending on indication, drug category, analysis objective, or other factors. From our experience in aNSCLC <span class="citation">(Mhatre et al. 2022; Ton et al. 2022)</span> several definitions - not only one - remain viable options even after discussion with experts, and eventually a pragmatic choice must be made. Despite a desire for standardization, we reached the conclusion that defining a single standard is not helpful given the current state of knowledge, and that instead we should promote best practices that support the emergence of - preferably rather few - standard definitions via publications in the scientific literature.</p>
 <p><br></p>
 <p>To promote the emergence of standard rwPFS definitions and comparability across analyses we propose the following best practices: <br><br></p>
 <blockquote>
@@ -200,7 +200,7 @@
 <div class="section level1">
 <h1 id="getting-started-with-rwpfs">Getting started with RwPFS<a class="anchor" aria-label="anchor" href="#getting-started-with-rwpfs"></a>
 </h1>
-<p>To start, we will add a rwPFS variable to a simulated dataset. For simplicity, we will use the rwPFS definition used in <span class="citation">Mhatre (2021)</span> and <span class="citation">Ton (2021)</span>:</p>
+<p>To start, we will add a rwPFS variable to a simulated dataset. For simplicity, we will use the rwPFS definition used in <span class="citation">Mhatre et al. (2022)</span> and <span class="citation">Ton et al. (2022)</span>:</p>
 <ul>
 <li><p><strong>Use all progression events except where “pseudoprogression mentioned”</strong> (not only events based on radiographic evidence, and we don’t discard progression events occurring within 2 weeks after baseline)</p></li>
 <li><p><strong>Follow patients for progression into subsequent lines of treatment</strong> (do not censor them at start of new line, do not impute progression at line change)</p></li>
@@ -506,7 +506,7 @@
 <p><br></p>
 <p>The obtained table gives an overview across the rwPFS definitions we’re considering. It compares the no. of censoring-, progression- and death events, as well as the percentage of rwPFS events (death and progression combined) that are death.</p>
 <p>Kaplan-Meier median and hazard ratio relative to the reference definition give an impression of how big the impact on corresponding analysis outcomes would be. Note that to obtain the hazard ratio, a cox regression was fitted to data of twice the same patients but with different endpoints. Since the Cox model assumes the data from two compared groups to be independent, this is a bit of a stretch. The HR should therefore cautiously be interpreted as a crude indication of expected impact on any HR analyses, in order to avoid doing full senstivity analyses with all rwPFS definitions.</p>
-<p>Jointly, these outputs allow a discussion of the potential impact of varying the rwPFS definition on rwPFS outcomes. In the present case, however, the underlying data are fabricated, hence such a discussion would not be very insightful. For a real-life example of using <code>compare_rwPFS</code> please refer to <span class="citation">Mhatre (2021)</span>.</p>
+<p>Jointly, these outputs allow a discussion of the potential impact of varying the rwPFS definition on rwPFS outcomes. In the present case, however, the underlying data are fabricated, hence such a discussion would not be very insightful. For a real-life example of using <code>compare_rwPFS</code> please refer to <span class="citation">Mhatre et al. (2022)</span>.</p>
 <p><br></p>
 <p>Maybe you noticed: when calling <code>compare_rwPFS</code> there was a warning about 8 patients having missing rwPFS. These are usually introduced by <code>calc_rwPFS</code> for good reasons: either if any of the required input dates are missing, if the order of dates does not make sense (e.g. death date before baseline, perhaps due to coarse granularity of death date information), etc.</p>
 <p>A quick check reveals that indeed the patients with (any type of) missing rwPFS have either zero days follow-up, or a progression event exactly at baseline. It’s generally a good idea to hand-check patients where the rwPFS event is of type “missing,” as this is what <code>calc_rwPFS</code> generates if the input data do not allow calculation of an rwPFS endpoint.</p>
@@ -953,7 +953,7 @@
 <div class="section level2">
 <h2 id="comparing-different-time-windows-for-capturing-death-events">Comparing different time windows for capturing death events<a class="anchor" aria-label="anchor" href="#comparing-different-time-windows-for-capturing-death-events"></a>
 </h2>
-<p>A remaining question is how long the time window for capturing deaths should be after the end of progression follow-up. We’ve chosen 30 days above, as discussed in <span class="citation">Mhatre (2021)</span> and <span class="citation">Ton (2021)</span>, but without a very strong rationale.</p>
+<p>A remaining question is how long the time window for capturing deaths should be after the end of progression follow-up. We’ve chosen 30 days above, as discussed in <span class="citation">Mhatre et al. (2022)</span> and <span class="citation">Ton et al. (2022)</span>, but without a very strong rationale.</p>
 <p><br></p>
 <p>There may not be one single “right” value for the size of this window. However, one way of verifying if a given value is sensible is to vary the length of this window and check how many additional deaths are captured when extending it. The idea here is that we want to capture most of the deaths that are correlated with the end of progression follow-up, meaning they happen shortly after. In addition, we want to keep the window as small as possible to minimize the risk of missing progression events happening during this period. A pragmatic choice may be made that reconciles these opposing objectives as well as possible.</p>
 <p><br> We can calculate rwPFS endpoints with varying window lengths as follows:</p>
@@ -1224,7 +1224,7 @@
 <p><br></p>
 <p>Similarly as before, we are now able to compare different rwPFS definitions at a glance and examine the impact of extending the time window for capturing death events.</p>
 <p><br></p>
-<p>Please note that this is only simulated data and does not <em>really</em> allow for a discussion of this issue. The following is just meant as an illustration, although the pattern found here mirrors quite closely the situation in real patient data as discussed in <span class="citation">Mhatre (2021)</span>.</p>
+<p>Please note that this is only simulated data and does not <em>really</em> allow for a discussion of this issue. The following is just meant as an illustration, although the pattern found here mirrors quite closely the situation in real patient data as discussed in <span class="citation">Mhatre et al. (2022)</span>.</p>
 <p>From these outputs one could argue for a 30 day time window as follows: first, a time-window of 0 days corresponds to a substantial HR difference compared to the reference (30d window). This indicates that it may indeed be important to capture death events occurring after end of progression follow-up. We can also see, that the effect of extending the window from 30d to 90d changes the HR by comparatively smaller amounts, suggesting that the effect of extending the window further is diminishing rapidly. This is reflected in the ‘Incremental deaths’ column as well: for the each 10-day period up to 30 days we capture approximately between 44 &amp; 67 additional deaths, with this number dropping rapidly thereafter. It is hard to tell where exactly the cutoff should be made - but one could say that 30d to 60d is reasonable since most censoring-related deaths appear to be captured, and further extension has negligible impact on hazard ratios.</p>
 <p><br></p>
 </div>
@@ -1234,10 +1234,10 @@
 </h1>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-rwPFS_OAK" class="csl-entry">
-Mhatre. 2021. <span>“Replicating Progression-Free Survival in the OAK Trial Using Real-World Data.”</span> <em>In Preparation</em>.
+Mhatre, Shivani K., Robson J. M. Machado, Thanh G. N. Ton, Huong Trinh, Julien Mazieres, Achim Rittmeyer, and Michael T. Bretscher. 2022. <span>“Real-World Progression-Free Survival as an Endpoint in Advanced Non-Small-Cell Lung Cancer: Replicating Atezolizumab and Docetaxel Arms of the OAK Trial Using Data Derived from Electronic Health Records.”</span> <em>medRxiv</em>. <a href="https://doi.org/10.1101/2022.05.02.22274571" class="external-link">https://doi.org/10.1101/2022.05.02.22274571</a>.
 </div>
 <div id="ref-EC_impowers" class="csl-entry">
-Ton. 2021. <span>“Replication of Overall Survival, Progression Free Survival and Response in Chemotherapy Arms of First Line Non-Small Cell Lung Cancer Trials Using Real-World Data External Controls.”</span> <em>In Preparation</em>.
+Ton, Thanh G. N., Navdeep Pal, Huong Trinh, Sami Mahrus, Michael T. Bretscher, Robson J. M. Machado, Natalia Sadetsky, Nayan Chaudhary, Michael W. Lu, and Gregory J. Riely. 2022. <span>“Replication of Overall Survival, Progression-Free Survival, and Overall Response in Chemotherapy Arms of Non-Small Cell Lung Cancer Trials Using Real-World Data.”</span> <em>Clinical Cancer Research</em>.
 </div>
 </div>
 </div>

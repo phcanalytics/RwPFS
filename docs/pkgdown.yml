@@ -3,8 +3,8 @@ pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   real_world_PFS: real_world_PFS.html
-last_built: 2022-05-16T07:10Z
+last_built: 2022-05-16T12:34Z
 urls:
-  reference: https://github.com/phcanalytics/RwPFS/reference
-  article: https://github.com/phcanalytics/RwPFS/articles
+  reference: https://phcanalytics.github.io/RwPFS/reference
+  article: https://phcanalytics.github.io/RwPFS/articles
 
