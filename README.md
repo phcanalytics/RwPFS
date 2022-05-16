@@ -33,7 +33,7 @@ devtools::install_git("https://github.com/phcanalytics/RwPFS")
 <br/>
 
 
-Get started with real-world PFS [here](https://pages.github.com/phcanalytics/RwPFS/articles/real_world_PFS.html)
+Get started with real-world PFS [here](https://phcanalytics.github.io/RwPFS/articles/real_world_PFS.html)
 
 <br/>
 
