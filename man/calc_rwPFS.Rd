@@ -73,7 +73,7 @@ Returns a data frame with the following new data columns added:
 
 If rwPFS could not be calculated, the \code{rwpfs<label>_event_type} will be set to "Missing", and all other columns will contain missing values.
 This can be due to one of the following reasons: missing \code{.last_progression_abstraction_date} <= \code{.start_date}, missing \code{.last_activity_date} or <= \code{.start_date}, \code{.last_progression_abstraction_date} <= \code{.start_date},
-or \code{.death_date} <= \code{.start_date} (this can happen because death dates are rounded to mid-month in Flatiron).
+or \code{.death_date} <= \code{.start_date} (this can happen when death dates are rounded for anonymization purposes).
 }
 \description{
 Calculates the real-world PFS (rwPFS) endpoint given information on follow-up period, progression-, and death dates.

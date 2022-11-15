@@ -84,7 +84,7 @@ Because of these differences, it appears sensible to speak of "real-world PFS" (
 
 
 
-## Algorithm for calculating rwPFS using Flatiron data 
+## Algorithm for calculating rwPFS
 
 
 Figure 1 in @rwPFS_OAK illustrates the important elements required for calculating a rwPFS endpoint:

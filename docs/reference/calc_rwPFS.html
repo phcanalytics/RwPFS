@@ -139,7 +139,7 @@ depend on various factors. See vignette for how to decide on the length of this 
 
 </dl><p>If rwPFS could not be calculated, the <code>rwpfs&lt;label&gt;_event_type</code> will be set to "Missing", and all other columns will contain missing values.
 This can be due to one of the following reasons: missing <code>.last_progression_abstraction_date</code> &lt;= <code>.start_date</code>, missing <code>.last_activity_date</code> or &lt;= <code>.start_date</code>, <code>.last_progression_abstraction_date</code> &lt;= <code>.start_date</code>,
-or <code>.death_date</code> &lt;= <code>.start_date</code> (this can happen because death dates are rounded to mid-month in Flatiron).</p>
+or <code>.death_date</code> &lt;= <code>.start_date</code> (this can happen when death dates are rounded for anonymization purposes).</p>
     </div>
 
     <div id="ref-examples">

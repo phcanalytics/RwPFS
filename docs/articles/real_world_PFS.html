@@ -78,7 +78,7 @@
       <h1 data-toc-skip>Real-world Progression-free Survival (rwPFS)</h1>
                         <h4 data-toc-skip class="author">Michael Bretscher</h4>
             
-            <h4 data-toc-skip class="date">2022-05-16</h4>
+            <h4 data-toc-skip class="date">2022-11-15</h4>
       
       
       <div class="hidden name"><code>real_world_PFS.Rmd</code></div>
@@ -107,7 +107,7 @@
 <p>Whether or not <strong>PFS</strong> and <strong>rwPFS</strong> endpoints are <strong>equivalent</strong> and can be used for comparing drug efficacy across two data sets (real-world and clinical trial) may depend on type of cancer, drug category, real-world database, and other factors. While attempts should be made to understand and ensure quality of data collection in the real-world data, this will likely never be perfect. Consequently, empirical confirmation of the equivalence of rwPFS and PFS will be needed. This can be done by replicating trial arms and comparing rwPFS and trial PFS outcomes <span class="citation">(Mhatre et al. 2022; Ton et al. 2022)</span>, across indications and drug categories.</p>
 </blockquote>
 <div class="section level2">
-<h2 id="algorithm-for-calculating-rwpfs-using-flatiron-data">Algorithm for calculating rwPFS using Flatiron data<a class="anchor" aria-label="anchor" href="#algorithm-for-calculating-rwpfs-using-flatiron-data"></a>
+<h2 id="algorithm-for-calculating-rwpfs">Algorithm for calculating rwPFS<a class="anchor" aria-label="anchor" href="#algorithm-for-calculating-rwpfs"></a>
 </h2>
 <p>Figure 1 in <span class="citation">Mhatre et al. (2022)</span> illustrates the important elements required for calculating a rwPFS endpoint:</p>
 <ul>
@@ -433,9 +433,7 @@
 <span class="co">#&gt; Warning in compare_rwPFS(., .labels = c("_all_events", "_discard_le_14d", : 8</span>
 <span class="co">#&gt; Patients with missing rwPFS were found and removed</span>
 <span class="co">#&gt; Warning: `select_()` was deprecated in dplyr 0.7.0.</span>
-<span class="co">#&gt; Please use `select()` instead.</span>
-<span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span>
-<span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span></code></pre></div>
+<span class="co">#&gt; Please use `select()` instead.</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="21%">
