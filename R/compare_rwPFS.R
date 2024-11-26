@@ -1,3 +1,11 @@
+utils::globalVariables(c(
+  ".", "patientid", "rwPFS_definition", "median", 
+  "lower", "upper", "estimate", "conf.low", "conf.high",
+  "grouping_var", "data", "rwPFS_event_type", "KM_median",
+  "hazard_ratio", "Death", "Censoring", "Progression",
+  "Incremental_deaths", "Percent_death"
+))
+
 #' Compare different real-world PFS (rwPFS) definitions
 #'
 #' @param .df a data frame
