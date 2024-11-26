@@ -45,7 +45,7 @@ Get started with real-world PFS [here](https://phcanalytics.github.io/RwPFS/arti
 <!-- badges: start -->
 
 [![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 
 
 

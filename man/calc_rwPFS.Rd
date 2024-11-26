@@ -56,18 +56,18 @@ Returns a data frame with the following new data columns added:
 
 \describe{
 
-\item{rwpfs<label>_eof_date}{The end date of progression follow-up. This is the earliest non-missing date of \code{.visit_gap_start_date},
+\item{rwpfs\if{html}{\out{<label>}}_eof_date}{The end date of progression follow-up. This is the earliest non-missing date of \code{.visit_gap_start_date},
 \code{.last_progression_abstraction_date}, and \code{.last_activity_date}}
 
-\item{rwpfs<label>_event_type}{The type of rwPFS event: "Death", "Progression", "Censored", or "Missing" (if rwPFS could not be calculated)}
+\item{rwpfs\if{html}{\out{<label>}}_event_type}{The type of rwPFS event: "Death", "Progression", "Censored", or "Missing" (if rwPFS could not be calculated)}
 
-\item{rwpfs<label>_date}{The rwPFS event- or censoring date.}
+\item{rwpfs\if{html}{\out{<label>}}_date}{The rwPFS event- or censoring date.}
 
-\item{rwpfs<label>_days}{The time from \code{.start_date} to \code{rwpfs<label>_date} in days.}
+\item{rwpfs\if{html}{\out{<label>}}_days}{The time from \code{.start_date} to \code{rwpfs<label>_date} in days.}
 
-\item{rwpfs<label>_event}{Whether a rwPFS event was recorded (1) or the observation was censored (0) }
+\item{rwpfs\if{html}{\out{<label>}}_event}{Whether a rwPFS event was recorded (1) or the observation was censored (0) }
 
-\item{rwpfs<label>_months}{The time from \code{.start_date} to \code{rwpfs<label>_date} in months.}
+\item{rwpfs\if{html}{\out{<label>}}_months}{The time from \code{.start_date} to \code{rwpfs<label>_date} in months.}
 
 }
 

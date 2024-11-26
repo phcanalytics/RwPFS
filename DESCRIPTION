@@ -1,5 +1,5 @@
 Package: RwPFS
-Title: Calculate and compare a range of real-world progression-free survival (rwPFS) endpoints.
+Title: Calculate and Compare a Range of Real-World Progression-Free Survival (rwPFS) Endpoints
 Version: 0.0.3
 Authors@R: c( 
     person(given = "Michael", family = "Bretscher", role = c("aut", "cre"), email = "mthbretscher@gmail.com"),
@@ -11,7 +11,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.2
 Imports:
     rlang,
     dplyr (>= 1.0.0),
